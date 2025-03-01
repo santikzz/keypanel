@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { UseFormReturn } from "react-hook-form";
 import { twMerge } from "tailwind-merge"
 import { number } from "zod";
 
@@ -68,3 +69,13 @@ export const durationUnits = [{
   value: "lifetime"
 },
 ] as const;
+
+
+export const useRandomPassword = (length: number = 16) => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()=+";
+  const randomPassword = Array.from(
+      crypto.getRandomValues(new Uint32Array(length)),
+      (x) => chars[x % chars.length],
+  ).join("");
+  return randomPassword;
+}

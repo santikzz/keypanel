@@ -16,7 +16,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
-    protected $guard_name = 'web';
+    // protected $guard_name = 'web';
 
     /**
      * The attributes that are mass assignable.
@@ -111,7 +111,7 @@ class User extends Authenticatable
         return $this->hasMany(License::class, 'issued_by');
     }
 
-    public function getOwnerIdAttribute(): ?int
+    public function getRealOwnerIdAttribute(): ?int
     {
         return $this->isOwner() ? $this->id : ($this->owner?->id ?? null);
     }

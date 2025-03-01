@@ -47,12 +47,12 @@ class LicenseController extends Controller
                 fn() =>
                 License::with('application:id,name', 'issuer:id,name')
                     ->whereHas('application', function ($query) use ($user) {
-                        $query->where('owner_id', $user->owner_id);
+                        $query->where('owner_id', $user->real_owner_id);
                     })->get(),
             ),
             'applications' => Inertia::defer(
                 fn() =>
-                Application::where('owner_id', $user->owner_id)
+                Application::where('owner_id', $user->real_owner_id)
                     ->get(['id', 'name'])
             )
         ]);
@@ -67,7 +67,7 @@ class LicenseController extends Controller
         */
         $license->load('application', 'application.owner', 'issuer');
 
-        if (!$user->hasPermissionTo('KEYS_READ') || $license->application->owner->id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('KEYS_READ') || $license->application->owner->id !== $user->real_owner_id) {
             return redirect()->route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -94,7 +94,7 @@ class LicenseController extends Controller
         /*
             Check if the user has permissions to create applications
         */
-        if (!$user->hasPermissionTo('KEYS_CREATE') || $application->owner->id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('KEYS_CREATE') || $application->owner->id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -154,7 +154,7 @@ class LicenseController extends Controller
         /*
             Check if the user has permissions to update applications
         */
-        if (!$user->hasPermissionTo('KEYS_UPDATE') || $license->application->owner->id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('KEYS_UPDATE') || $license->application->owner->id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -180,7 +180,7 @@ class LicenseController extends Controller
             Check if the user has permissions to delete applications
             and is the owner of the application.
         */
-        if (!$user->hasPermissionTo('KEYS_DELETE') || $license->application->owner_id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('KEYS_DELETE') || $license->application->owner_id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -197,7 +197,7 @@ class LicenseController extends Controller
         /*
             Check if the user has permissions to reset licenses hwid
         */
-        if (!$user->hasPermissionTo('KEYS_RESET_HWID') || $license->application->owner->id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('KEYS_RESET_HWID') || $license->application->owner->id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -215,7 +215,7 @@ class LicenseController extends Controller
         /*
             Check if the user has permissions to add time to licenses
         */
-        if (!$user->hasPermissionTo('KEYS_ADD_TIME') || $license->application->owner->id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('KEYS_ADD_TIME') || $license->application->owner->id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 

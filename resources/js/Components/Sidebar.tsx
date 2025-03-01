@@ -8,8 +8,7 @@ const menuItems = [
     { icon: Home, label: "Dashboard", href: "/dashboard", role: ["owner", "manager", "reseller"] },
     { icon: Package, label: "Applications", href: "/applications", role: ["owner", "manager"] },
     { icon: KeyRound, label: "Licenses", href: "/licenses", role: ["owner", "manager", "reseller"] },
-    { icon: Users, label: "Managers", href: "/managers", role: ["owner"] },
-    { icon: Users, label: "Resellers", href: "/resellers", role: ["owner"] },
+    { icon: Users, label: "Users", href: "/users", role: ["owner"] },
     { icon: UserCog, label: "Profile", href: "/profile", role: ["owner", "manager", "reseller"] },
 ]
 

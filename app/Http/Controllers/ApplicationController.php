@@ -25,7 +25,7 @@ class ApplicationController extends Controller
             'applications' => Inertia::defer(
                 fn() =>
                 Application::with('owner')
-                    ->where('owner_id', $user->owner_id)
+                    ->where('owner_id', $user->real_owner_id)
                     ->get()
             ),
         ]);
@@ -38,7 +38,7 @@ class ApplicationController extends Controller
             Check if the user has permissions to read applications
             and is the owner of the application.
         */
-        if (!$user->hasPermissionTo('APPS_READ') || $application->owner_id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('APPS_READ') || $application->owner_id !== $user->real_owner_id) {
             return redirect()->route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -75,7 +75,7 @@ class ApplicationController extends Controller
         ]);
 
         $application = Application::create([
-            'owner_id' => $user->owner_id,
+            'owner_id' => $user->real_owner_id,
             'app_hash_id' => bin2hex(random_bytes(8)),
             'name' => request('name'),
             'status' => request('status'),
@@ -93,7 +93,7 @@ class ApplicationController extends Controller
             Check if the user has permissions to update applications
             and is the owner of the application.
         */
-        if (!$user->hasPermissionTo('APPS_UPDATE') || $application->owner_id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('APPS_UPDATE') || $application->owner_id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -120,7 +120,7 @@ class ApplicationController extends Controller
             Check if the user has permissions to delete applications
             and is the owner of the application.
         */
-        if (!$user->hasPermissionTo('APPS_DELETE') || $application->owner_id !== $user->owner_id) {
+        if (!$user->hasPermissionTo('APPS_DELETE') || $application->owner_id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
