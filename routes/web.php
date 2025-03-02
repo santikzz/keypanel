@@ -66,10 +66,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/manager', [UserController::class, 'storeManager'])->name('users.storeManager');
     Route::post('/user/reseller', [UserController::class, 'storeReseller'])->name('users.storeReseller');
     // update
-    Route::put('/user/manager/{user}', [UserController::class, 'updateManager'])->name('users.updateManager');
-    Route::put('/user/reseller/{user}', [UserController::class, 'updateReseller'])->name('users.updateReseller');
+    Route::put('/user/manager/{manager}', [UserController::class, 'updateManager'])->name('users.updateManager');
+    Route::put('/user/reseller/{reseller}', [UserController::class, 'updateReseller'])->name('users.updateReseller');
     // delete
     Route::delete('/user/{user}', [UserController::class, 'delete'])->name('users.delete');
+    // balance
+    Route::post('/reseller/{reseller}/setbalance', [UserController::class, 'setBalance'])->name('users.setBalance');
+    Route::post('/reseller/{reseller}/addbalance', [UserController::class, 'addBalance'])->name('users.addBalance');
 
 });
 

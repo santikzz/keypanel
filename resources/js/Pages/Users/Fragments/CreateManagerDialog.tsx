@@ -12,10 +12,10 @@ import { Loader2, Plus, RefreshCcw } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/Components/ui/form"
 import { Checkbox } from "@/Components/ui/checkbox"
 import { Label } from "@/Components/ui/label"
-import { toastDark, useRandomPassword } from "@/lib/utils"
+import { parsePermission, PERMISSIONS, toastDark, useRandomPassword } from "@/lib/utils"
 
 const formSchema = z.object({
-    name: z.string().min(6).max(24),
+    name: z.string().min(6).max(24).regex(/^[a-zA-Z0-9]+$/, "Username must be alphanumeric"),
     password: z.string().min(8).max(64),
     permissions: z.array(z.string()).optional(),
 });
@@ -24,27 +24,6 @@ export function CreateManagerDialog() {
 
     const [open, setOpen] = useState(false)
     const [isPending, setPending] = useState(false);
-
-    const permissions = [
-        'APPS_CREATE',
-        'APPS_READ',
-        'APPS_UPDATE',
-        'APPS_DELETE',
-        'KEYS_CREATE',
-        'KEYS_READ',
-        'KEYS_UPDATE',
-        'KEYS_DELETE',
-        'KEYS_RESET_HWID',
-        'KEYS_ADD_TIME',
-        'RESELLER_CREATE',
-        'RESELLER_READ',
-        'RESELLER_UPDATE',
-        'RESELLER_DELETE',
-        'MANAGER_CREATE',
-        'MANAGER_READ',
-        'MANAGER_UPDATE',
-        'MANAGER_DELETE'
-    ];
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -72,10 +51,6 @@ export function CreateManagerDialog() {
     const setRandomPassword = () => {
         const password = useRandomPassword();
         form.setValue("password", password);
-    }
-
-    const parsePermission = (string: string) => {
-        return string.replace(/_/g, " ");
     }
 
     return (
@@ -149,7 +124,7 @@ export function CreateManagerDialog() {
                                         <FormItem className="flex flex-col space-y-2 rounded-md border p-4">
                                             <FormControl>
                                                 <div className="grid grid-cols-3 gap-3">
-                                                    {permissions.map((permission, idx) => (
+                                                    {PERMISSIONS.map((permission, idx) => (
                                                         <div key={idx} className="flex items-center gap-2">
                                                             <Checkbox
                                                                 key={idx}

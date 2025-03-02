@@ -18,8 +18,7 @@ import AddTimeDialog from '@/Components/Dialogs/AddTimeDialog';
 export default function Show({ license }: { license: object }) {
 
     const user = usePage().props.auth.user;
-    console.log(user);
-
+    
     const [copied, setCopied] = useState(false)
     const [licenseStatus, setLicenseStatus] = useState("active")
     const [showAddTimeDialog, setShowAddTimeDialog] = useState(false)

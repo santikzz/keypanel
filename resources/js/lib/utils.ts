@@ -79,3 +79,29 @@ export const useRandomPassword = (length: number = 16) => {
   ).join("");
   return randomPassword;
 }
+
+export const parsePermission = (string: string) => {
+  return string.replace(/_/g, " ");
+}
+
+export const PERMISSIONS = [
+  'APPS_CREATE',
+  'APPS_READ',
+  'APPS_UPDATE',
+  'APPS_DELETE',
+  'KEYS_CREATE',
+  'KEYS_READ',
+  'KEYS_UPDATE',
+  'KEYS_DELETE',
+  'KEYS_RESET_HWID',
+  'KEYS_ADD_TIME',
+  'RESELLER_CREATE',
+  'RESELLER_READ',
+  'RESELLER_UPDATE',
+  'RESELLER_DELETE',
+  'RESELLER_ADD_BALANCE',
+  'MANAGER_CREATE',
+  'MANAGER_READ',
+  'MANAGER_UPDATE',
+  'MANAGER_DELETE'
+];

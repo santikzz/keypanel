@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ApplicationRequest;
 use App\Models\Application;
+use App\Models\BalanceTransaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -78,7 +79,11 @@ class UserController extends Controller
             return redirect()->route('dashboard')->with('error', 'Not allowed.');
         }
 
-        $reseller->load('licenses', 'licenses.application');
+        $reseller->load([
+            'licenses',
+            'licenses.application',
+            'transactions' => fn($query) => $query->orderBy('created_at', 'desc')
+        ]);
 
         return Inertia::render('Users/Reseller/Show', [
             'reseller' => Inertia::defer(fn() => $reseller)
@@ -158,7 +163,7 @@ class UserController extends Controller
             Check if the user has permissions to update managers
             and is the owner of the manager.
         */
-        if (!$user->hasPermissionTo('MANAGER_UPDATE') || $manager->owner_id !== $user->real_owner_id) {
+        if (!$user->hasPermissionTo('MANAGER_UPDATE') || $manager->owner_id !== $user->real_owner_id || !$manager->isManager()) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -188,7 +193,7 @@ class UserController extends Controller
             $manager->syncPermissions($validPermissions);
         }
 
-        return to_route('users.show', $manager->id)
+        return to_route('users.showManager', $manager->id)
             ->with('success', 'Manager updated successfully.');
     }
 
@@ -199,7 +204,7 @@ class UserController extends Controller
             Check if the user has permissions to update resellers
             and is the owner of the reseller.
         */
-        if (!$user->hasPermissionTo('RESELLER_UPDATE') || $reseller->owner_id !== $user->real_owner_id) {
+        if (!$user->hasPermissionTo('RESELLER_UPDATE') || $reseller->owner_id !== $user->real_owner_id || !$reseller->isReseller()) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
@@ -208,28 +213,30 @@ class UserController extends Controller
 
         $validated = request()->validate([
             'password' => 'sometimes|string|min:8|max:64',
-            'disabled' => 'sometimes|boolean'
+            'disabled' => 'sometimes|boolean',
         ]);
 
         // update only allowed and present fields in the request
         $reseller->update(array_intersect_key($validated, array_flip($allowedFields)));
 
-        return to_route('users.show', $reseller->id)
+        return to_route('users.showReseller', $reseller->id)
             ->with('success', 'Reseller updated successfully.');
     }
 
-    public function delete(User $_user): RedirectResponse
+    public function delete(User $user): Response|RedirectResponse
     {
-        $user = Auth::user();
+        // idk i named the request user and the auth user the same im dumb
+
+        $authUser = Auth::user();
         /*
             If the user role is a manager, check if the user has permissions to delete managers
             and is the owner of the manager
         */
-        if ($_user->role === 'manager') {
-            if (!$user->hasPermissionTo('MANAGERS_DELETE') || $_user->owner_id !== $user->real_owner_id || $_user->id === $user->id) {
+        if ($user->role === 'manager') {
+            if (!$authUser->hasPermissionTo('MANAGER_DELETE') || $user->owner_id !== $authUser->real_owner_id || $user->id === $authUser->id) {
                 return to_route('dashboard')->with('error', 'Not allowed.');
             }
-            $_user->delete();
+            $user->delete();
             return to_route('users.index')->with('success', 'Manager deleted successfully.');
         }
 
@@ -237,12 +244,70 @@ class UserController extends Controller
             If the user role is a reseller, check if the user has permissions to delete resellers
             and is the owner of the reseller
         */
-        if ($_user->role === 'reseller') {
-            if (!$user->hasPermissionTo('RESELLER_DELETE') || $_user->owner_id !== $user->real_owner_id) {
+        if ($user->role === 'reseller') {
+            if (!$authUser->hasPermissionTo('RESELLER_DELETE') || $user->owner_id !== $authUser->real_owner_id) {
                 return to_route('dashboard')->with('error', 'Not allowed.');
             }
-            $_user->delete();
+            $user->delete();
             return to_route('users.index')->with('success', 'Reseller deleted successfully.');
         }
+
+        return to_route('users.index');
+    }
+
+    public function setBalance(Request $request, User $reseller): RedirectResponse
+    {
+        $user = Auth::user();
+        /*
+            Check if the user has permissions to update resellers
+            and is the owner of the reseller.
+        */
+        if (!$user->hasPermissionTo('RESELLER_ADD_BALANCE') || $reseller->owner_id !== $user->real_owner_id || !$reseller->isReseller()) {
+            return to_route('dashboard')->with('error', 'Not allowed.');
+        }
+
+        $validated = request()->validate(['balance' => 'required|numeric|min:0']);
+
+        $reseller->update(['balance' => $validated['balance']]);
+
+        //create a balance set type transaction
+        BalanceTransaction::create([
+            'user_id' => $reseller->id,
+            'type' => 'set',
+            'amount' => $validated['balance'],
+            'total' => $validated['balance'],
+            'description' => 'Set balance',
+        ]);
+
+        return to_route('users.showReseller', $reseller->id)->with('success', 'Balance updated successfully.');
+    }
+
+    public function addBalance(Request $request, User $reseller): RedirectResponse
+    {
+        $user = Auth::user();
+        /*
+            Check if the user has permissions to update resellers
+            and is the owner of the reseller.
+        */
+        if (!$user->hasPermissionTo('RESELLER_ADD_BALANCE') || $reseller->owner_id !== $user->real_owner_id || !$reseller->isReseller()) {
+            return to_route('dashboard')->with('error', 'Not allowed.');
+        }
+
+        $validated = request()->validate(['balance' => 'required|numeric|gt:0']);
+
+        $newBalance = $reseller->balance + $validated['balance'];
+
+        $reseller->update(['balance' => $reseller->balance + $validated['balance']]);
+
+        //create a balance credit type transaction
+        BalanceTransaction::create([
+            'user_id' => $reseller->id,
+            'type' => 'credit',
+            'amount' => $validated['balance'],
+            'total' => $newBalance,
+            'description' => 'Added balance',
+        ]);
+
+        return to_route('users.showReseller', $reseller->id)->with('success', 'Balance added successfully.');
     }
 }

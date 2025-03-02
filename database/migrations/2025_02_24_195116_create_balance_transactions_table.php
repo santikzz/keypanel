@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('balance_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
+            $table->enum('type', ['credit', 'debit', 'set']);
             $table->decimal('amount', 10, 2);
-            $table->enum('type', ['credit', 'debit']);
+            $table->decimal('total', 10, 2);
             $table->string('description');
             $table->timestamps();
         });

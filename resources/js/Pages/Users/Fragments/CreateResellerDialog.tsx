@@ -13,7 +13,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { toastDark, useRandomPassword } from "@/lib/utils"
 
 const formSchema = z.object({
-    name: z.string().min(6).max(24),
+    name: z.string().min(6).max(24).regex(/^[a-zA-Z0-9]+$/, "Username must be alphanumeric"),
     password: z.string().min(8).max(64),
     // apps: z.array(z.object({
     //     label: z.string(),

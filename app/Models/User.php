@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];
 
     protected $with = ['roles', 'permissions'];
-    
+
     protected $appends = ['all_permissions'];
 
     /**
@@ -57,6 +57,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'disabled' => 'boolean'
         ];
     }
 
@@ -103,17 +104,23 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'owner_id')->where('role', 'manager');
     }
 
-    public function applications(){
+    public function applications()
+    {
         return $this->hasMany(Application::class, 'owner_id');
     }
 
-    public function licenses(){
+    public function licenses()
+    {
         return $this->hasMany(License::class, 'issued_by');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(BalanceTransaction::class, 'user_id');
     }
 
     public function getRealOwnerIdAttribute(): ?int
     {
         return $this->isOwner() ? $this->id : ($this->owner?->id ?? null);
     }
-
 }

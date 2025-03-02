@@ -38,6 +38,7 @@ class RolePermissionSeeder extends Seeder
             'RESELLER_READ',
             'RESELLER_UPDATE',
             'RESELLER_DELETE',
+            'RESELLER_ADD_BALANCE',
             // managers
             'MANAGER_CREATE',
             'MANAGER_READ',
