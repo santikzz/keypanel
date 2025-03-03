@@ -26,23 +26,10 @@ const formSchema = z.object({
     cost: z.number().gt(0).default(0),
 });
 
-const editFormSchema = z.object({
-    name: z.string().max(24),
-    duration_unit: z.string(),
-    duration_value: z.number().gt(0),
-    cost: z.number().gt(0).default(0),
-    reseller_app_id: z.number().gt(0),
-});
-
-
 export function ResellerApplications({ reseller, applications, resellerApps }: { reseller: object, applications: object[], resellerApps: object[] }) {
 
     const form = useForm({
         resolver: zodResolver(formSchema)
-    });
-
-    const editForm = useForm({
-        resolver: zodResolver(editFormSchema)
     });
 
     const user = usePage().props.auth.user;
@@ -54,10 +41,6 @@ export function ResellerApplications({ reseller, applications, resellerApps }: {
     const [selectedAssignApp, setSelectedAssignApp] = useState(null)
     const [isAssignPending, setAssignPending] = useState(false)
     const [isAddTimePending, setAddTimePending] = useState(false)
-
-    // const [selectedOption, setSelectedOption] = useState(null)
-    // const [editTimeOption, setEditTimeOption] = useState(null)
-    // const [editTimeOptionOpen, setEditTimeOptionOpen] = useState(false)
     const [deletePending, setDeletePending] = useState(false)
 
     /*
@@ -222,11 +205,11 @@ export function ResellerApplications({ reseller, applications, resellerApps }: {
                         <DialogDescription>Add a new time option</DialogDescription>
                     </DialogHeader>
 
-                    <Form {...editForm}>
-                        <form onSubmit={editForm.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
 
                             <FormField
-                                control={editForm.control}
+                                control={form.control}
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
@@ -243,7 +226,7 @@ export function ResellerApplications({ reseller, applications, resellerApps }: {
                             />
 
                             <FormField
-                                control={editForm.control}
+                                control={form.control}
                                 name="duration_unit"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col flex-1 mt-2.5">
@@ -268,7 +251,7 @@ export function ResellerApplications({ reseller, applications, resellerApps }: {
                             />
 
                             <FormField
-                                control={editForm.control}
+                                control={form.control}
                                 name="duration_value"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
@@ -289,7 +272,7 @@ export function ResellerApplications({ reseller, applications, resellerApps }: {
                             />
 
                             <FormField
-                                control={editForm.control}
+                                control={form.control}
                                 name="cost"
                                 render={({ field }) => (
                                     <FormItem>

@@ -53,7 +53,7 @@ export default function AddTimeDialog({ license }: { license: object }) {
         setOpen(false);
         setPending(true);
 
-        router.post(route('licenses.update', license?.id), values,
+        router.post(route('licenses.addtime', license?.id), values,
             {
                 onError: () => {
                     toast.error('Error updating license', { style: toastDark })

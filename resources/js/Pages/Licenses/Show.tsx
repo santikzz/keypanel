@@ -37,10 +37,10 @@ export default function Show({ license }: { license: object }) {
     const [deletePending, setDeletePending] = useState(false);
 
     const activityLog = [
-        { id: 1, date: "2023-10-15 14:30:22", action: "License created", user: "John Doe", ip: "192.168.1.1" },
-        { id: 2, date: "2023-11-02 09:15:43", action: "License activated", user: "Customer", ip: "203.0.113.45" },
-        { id: 3, date: "2023-12-10 16:22:10", action: "HWID updated", user: "Customer", ip: "203.0.113.45" },
-        { id: 4, date: "2024-01-05 11:05:37", action: "Login attempt", user: "Customer", ip: "203.0.113.45" },
+        // { id: 1, date: "2023-10-15 14:30:22", action: "License created", user: "John Doe", ip: "192.168.1.1" },
+        // { id: 2, date: "2023-11-02 09:15:43", action: "License activated", user: "Customer", ip: "203.0.113.45" },
+        // { id: 3, date: "2023-12-10 16:22:10", action: "HWID updated", user: "Customer", ip: "203.0.113.45" },
+        // { id: 4, date: "2024-01-05 11:05:37", action: "Login attempt", user: "Customer", ip: "203.0.113.45" },
     ]
 
     const copyToClipboard = () => {
