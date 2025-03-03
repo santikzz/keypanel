@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { router } from "@inertiajs/react"
+import { router, usePage } from "@inertiajs/react"
 import toast from "react-hot-toast"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,6 +21,9 @@ const formSchema = z.object({
 });
 
 export function CreateManagerDialog() {
+
+    const user = usePage().props.auth.user;
+    const canCreate = user?.all_permissions.includes('MANAGER_CREATE');
 
     const [open, setOpen] = useState(false)
     const [isPending, setPending] = useState(false);
@@ -56,7 +59,10 @@ export function CreateManagerDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="btn-primary hover:bg-indigo-700">
+                <Button
+                    className="btn-primary hover:bg-indigo-700"
+                    disabled={!canCreate}
+                >
                     <Plus />
                     New manager
                 </Button>

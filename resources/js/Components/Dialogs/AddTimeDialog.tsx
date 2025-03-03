@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import toast from "react-hot-toast"
-import { router } from "@inertiajs/react"
+import { router, usePage } from "@inertiajs/react"
 import { calculateDuration, cn, durationUnits, toastDark } from "@/lib/utils"
 
 import { Calendar, Check, Clock, Clock1, Layers, Loader2, Plus, StickyNote } from "lucide-react"
@@ -22,6 +22,9 @@ const formSchema = z.object({
 });
 
 export default function AddTimeDialog({ license }: { license: object }) {
+
+    const user = usePage().props.auth.user;
+    const canAddTime = user?.all_permissions.includes('KEYS_ADD_TIME');
 
     const [open, setOpen] = useState(false);
     const [isPending, setPending] = useState(false);
@@ -67,7 +70,7 @@ export default function AddTimeDialog({ license }: { license: object }) {
                 <Button
                     size="sm"
                     className="btn-primary flex items-center gap-1"
-                    disabled={isPending}
+                    disabled={isPending || !canAddTime}
                 >
                     {isPending ? <Loader2 className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
                     Add Time

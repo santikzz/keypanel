@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table"
-import { ArrowUpDown, Check, Clipboard, Loader2 } from "lucide-react"
+import { ArrowUpDown, Check, ChevronRight, Clipboard, Loader2 } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import { Input } from "@/Components/ui/input"
@@ -9,7 +9,7 @@ import { Badge } from "@/Components/ui/badge"
 import { Label } from "@/Components/ui/label"
 import clsx from "clsx"
 import { formatDuration } from "@/lib/utils"
-import { WhenVisible } from "@inertiajs/react"
+import { router, WhenVisible } from "@inertiajs/react"
 import { ShowCreateLicenseDialog } from "@/Pages/Applications/Fragments/ShowCreateLicenseDialog"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/Components/ui/tooltip";
 
@@ -147,17 +147,17 @@ export function ShowLicensesTable({ application, licenses }: { application: obje
                     {row.original.revoked === '1' ? 'Revoked' : row.getValue("status")}
                 </Badge>
         },
-        // {
-        //     id: "actions",
-        //     enableHiding: false,
-        //     cell: ({ row }) => {
-        //         return (
-        //             <Button>
-        //                 NONE
-        //             </Button>
-        //         )
-        //     },
-        // },
+        {
+            id: "actions",
+            enableHiding: false,
+            cell: ({ row }) => {
+                return (
+                    <div className="flex justify-end">
+                        <ChevronRight className="text-zinc-600" />
+                    </div>
+                )
+            },
+        },
     ]
 
     const [sorting, setSorting] = React.useState<SortingState>([])
@@ -233,6 +233,8 @@ export function ShowLicensesTable({ application, licenses }: { application: obje
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
+                                    className="cursor-pointer"
+                                    onClick={() => router.visit(route('licenses.show', row.original.id))}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

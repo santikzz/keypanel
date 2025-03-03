@@ -15,7 +15,7 @@ use Illuminate\Http\RedirectResponse;
 class LicenseController extends Controller
 {
 
-    private $DURATION_UNITS = [
+    public static $DURATION_UNITS = [
         'hours' => 1,           // 1 hour
         'days' => 24,           // 24 hours in a day
         'weeks' => 168,         // 168 hours in a week
@@ -24,15 +24,15 @@ class LicenseController extends Controller
         'lifetime' => 0,        // lifetime
     ];
 
-    private function generateKey(): string
+    public static function generateKey(): string
     {
         $key = bin2hex(random_bytes(24));
         return $key;
     }
 
-    private function calculateDuration(string $unit, int $value): int
+    public static function calculateDuration(string $unit, int $value): int
     {
-        return $this->DURATION_UNITS[$unit] * $value * 3600;
+        return LicenseController::$DURATION_UNITS[$unit] * $value * 3600;
     }
 
     public function index(): Response|RedirectResponse

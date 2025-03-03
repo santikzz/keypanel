@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -12,9 +12,7 @@ import { Calendar, Clock1, Layers, Loader2, Plus, StickyNote, Tag } from "lucide
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/Components/ui/form"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from "@/Components/ui/select"
 import { Switch } from "@/Components/ui/switch"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/Components/ui/alert-dialog"
-import { cn, durationUnits, formatDuration, toastDark } from "@/lib/utils"
-import { Textarea } from "@headlessui/react"
+import { cn, durationUnits, toastDark } from "@/lib/utils"
 
 const formSchema = z.object({
     app_id: z.string(),
@@ -25,6 +23,9 @@ const formSchema = z.object({
 });
 
 export function IndexCreateLicenseDialog({ applications }: { applications: object[] }) {
+
+    const user = usePage().props.auth.user;
+    const canCreate = user?.all_permissions.includes('KEYS_CREATE');
 
     const [open, isOpen] = useState(false);
     const [isPending, setPending] = useState(false);
@@ -58,8 +59,11 @@ export function IndexCreateLicenseDialog({ applications }: { applications: objec
             <Deferred data="applications" fallback={<Button className="btn-primary" disabled> <Plus />New license</Button>}>
                 <Dialog open={open} onOpenChange={isOpen}>
                     <DialogTrigger asChild>
-
-                        <Button className="btn-primary"><Plus />New license</Button>
+                        <Button
+                            className="btn-primary"
+                            disabled={!canCreate}
+                        ><Plus />New license
+                        </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-zinc-950 border border-zinc-900">
                         <DialogHeader>

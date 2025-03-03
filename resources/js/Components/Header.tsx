@@ -2,19 +2,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Button } from "@/Components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 
 export const Header = () => {
 
-    // const { user, clearSession } = useAuth();
-    // const [, setLocation] = useLocation();
-    // const isReseller = user?.role === 'reseller' ? true : false;
-    // const { data } = useBalanceMe();
-
-    // const handleLogout = () => {
-    //     clearSession();
-    //     setLocation('/login');
-    // }
     const user = usePage().props.auth.user;
 
     return (
@@ -48,7 +39,7 @@ export const Header = () => {
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => router.post('/logout')}>
                                 Log out
                             </DropdownMenuItem>
                         </DropdownMenuContent>

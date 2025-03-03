@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/Com
 import { Textarea } from '@headlessui/react';
 import { CheckIcon, CopyIcon, Download } from 'lucide-react';
 import { cn, formatDuration } from '@/lib/utils';
+import { Head } from '@inertiajs/react';
 
 export default function Show({ licenses, application }: { licenses: object[], application: object }) {
 
@@ -40,10 +41,10 @@ ${licenseList}
 
     return (
         <AuthenticatedLayout>
+            <Head title='Bulk Result' />
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Licenses Management</h2>
-                    <p className="text-muted-foreground">View and manage your licenses</p>
+                    <h2 className="text-3xl font-bold tracking-tight">Bulk Result</h2>
                 </div>
 
                 <div className='flex flex-row gap-4'>

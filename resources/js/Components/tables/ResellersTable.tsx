@@ -1,8 +1,8 @@
 import * as React from "react"
-import { Deferred, Link } from "@inertiajs/react"
+import { Deferred, Link, router } from "@inertiajs/react"
 
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table"
-import { ArrowUpDown, Loader2, Settings } from "lucide-react"
+import { ArrowUpDown, ChevronRight, Loader2, Settings } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Input } from "@/Components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/Components/ui/table"
@@ -96,11 +96,7 @@ export function ResellersTable({ resellers }: { resellers: object[] }) {
             cell: ({ row }) => {
                 return (
                     <div className="flex justify-end">
-                        <Link href={route('users.showReseller', row.original.id)}>
-                            <Button className="btn-primary size-8">
-                                <Settings />
-                            </Button>
-                        </Link>
+                        <ChevronRight className="text-zinc-600" />
                     </div>
                 )
             },
@@ -171,6 +167,8 @@ export function ResellersTable({ resellers }: { resellers: object[] }) {
                                     <TableRow
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
+                                        className="cursor-pointer"
+                                        onClick={() => router.visit(route('users.showReseller', row.original.id))}
                                     >
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id}>

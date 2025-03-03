@@ -25,11 +25,16 @@ const formSchema = z.object({
 
 export default function ShowDetails({ application }: { application: object }) {
 
+    const user = usePage().props.auth.user;
+
     const [isPending, setPending] = useState(false);
     const [isDeletePending, setDeletePending] = useState(false);
     const [copied, setCopied] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const [isVisible, setIsVisible] = useState<boolean>(false);
+
+    const canUpdate = user?.all_permissions.includes('APPS_UPDATE');
+    const canDelete = user?.all_permissions.includes('APPS_DELETE');
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -94,7 +99,7 @@ export default function ShowDetails({ application }: { application: object }) {
                     variant='ghost'
                     className='text-red-900'
                     type='button'
-                    disabled={isDeletePending}
+                    disabled={isDeletePending || !canDelete}
                 >
                     {isDeletePending ? (<Loader2 className="animate-spin" />) : (<Trash />)}
                     Delete application
@@ -198,7 +203,7 @@ export default function ShowDetails({ application }: { application: object }) {
                                     <Button
                                         type="submit"
                                         className="btn-primary"
-                                        disabled={isPending}
+                                        disabled={isPending || !canUpdate}
                                     >
                                         {isPending ? (
                                             <><Loader2 className="animate-spin" />Saving changes...</>
@@ -295,7 +300,10 @@ export default function ShowDetails({ application }: { application: object }) {
                                         </button>
                                     </div>
 
-                                    <Button className='btn-primary'>
+                                    <Button
+                                        className='btn-primary'
+                                        disabled={!canUpdate}
+                                    >
                                         <RotateCw size={16} aria-hidden="true" />
                                         Renew
                                     </Button>

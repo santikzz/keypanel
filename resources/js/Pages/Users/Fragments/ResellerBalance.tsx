@@ -13,7 +13,7 @@ import { Label } from "@/Components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from "@/Components/ui/dialog"
-import { router } from "@inertiajs/react"
+import { router, usePage } from "@inertiajs/react"
 import { toastDark } from "@/lib/utils"
 import toast from "react-hot-toast"
 import clsx from "clsx"
@@ -27,6 +27,9 @@ const addFormSchema = z.object({
 });
 
 export function ResellerBalance({ reseller }: { reseller: object }) {
+
+    const user = usePage().props.auth.user;
+    const canAddBalance = user?.all_permissions.includes('RESELLER_ADD_BALANCE');
 
     const [addBalanceOpen, setAddBalanceOpen] = useState(false)
     const [isSetPending, setSetPending] = useState(false);
@@ -69,13 +72,6 @@ export function ResellerBalance({ reseller }: { reseller: object }) {
         });
     }
 
-    // const reseller?.transactions? = [
-    //     { id: 1, date: "2024-02-28 14:30:22", type: "Add", amount: 1000, balance: 5000 },
-    //     { id: 2, date: "2024-02-15 09:15:43", type: "Subtract", amount: 450, balance: 4000 },
-    //     { id: 3, date: "2024-01-30 11:05:37", type: "Add", amount: 2000, balance: 4450 },
-    //     { id: 4, date: "2024-01-15 16:22:10", type: "Subtract", amount: 100, balance: 2450 },
-    // ]
-
     return (
         <>
             <Card className="mb-8">
@@ -92,7 +88,7 @@ export function ResellerBalance({ reseller }: { reseller: object }) {
                         <Button
                             className="btn-primary"
                             onClick={() => setAddBalanceOpen(true)}
-                            disabled={isAddPending}
+                            disabled={isAddPending || !canAddBalance}
                         >
                             {isAddPending ? <Loader2 className="animate-spin" /> : <Plus />}
                             Add Balance
@@ -171,7 +167,7 @@ export function ResellerBalance({ reseller }: { reseller: object }) {
                                         <Button
                                             type="submit"
                                             className="btn-primary"
-                                            disabled={isSetPending}
+                                            disabled={isSetPending || !canAddBalance}
                                         >
                                             {isSetPending ? <Loader2 className="animate-spin" /> : <Check />}
                                             Set New Balance

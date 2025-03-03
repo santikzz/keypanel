@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table"
-import { ArrowUpDown, Check, Clipboard, Loader2 } from "lucide-react"
+import { ArrowUpDown, Check, CheckCircle, ChevronRight, Clipboard, Loader2 } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import { Input } from "@/Components/ui/input"
@@ -43,20 +43,25 @@ export function IndexLicensesTable({ licenses, applications }: { licenses: objec
                 )
             },
             cell: ({ row }) => (
-                <div className=" flex flex-row items-center gap-2">
-
+                <div
+                    className="flex flex-row items-center gap-2 max-w-lg"
+                    onClick={(e) => e.stopPropagation()}
+                >
                     <TooltipProvider delayDuration={0}>
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Button variant='ghost' className="size-8 text-indigo-800" onClick={() => handleCopy(row.getValue("license_key"))}>
-                                    <Clipboard />
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => copyToClipboard(row.getValue("license_key"))}
+                                    className="h-4 w-4 text-indigo-50">
+                                    {copied ? <CheckCircle/> : <Clipboard />}
+                                    <span className="sr-only">Copy license key</span>
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent className="px-2 py-1 text-xs">Copy to clipboard</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
-
-                    <Label className="lowercase">{row.getValue("license_key")}</Label>
+                    <Label className="lowercase cursor-text">{row.getValue("license_key")}</Label>
                 </div>
             ),
         },
@@ -147,19 +152,20 @@ export function IndexLicensesTable({ licenses, applications }: { licenses: objec
                     {row.original.revoked === '1' ? 'Revoked' : row.getValue("status")}
                 </Badge>
         },
-        // {
-        //     id: "actions",
-        //     enableHiding: false,
-        //     cell: ({ row }) => {
-        //         return (
-        //             <Button>
-        //                 NONE
-        //             </Button>
-        //         )
-        //     },
-        // },
+        {
+            id: "actions",
+            enableHiding: false,
+            cell: ({ row }) => {
+                return (
+                    <div className="flex justify-end">
+                        <ChevronRight className="text-zinc-600" />
+                    </div>
+                )
+            },
+        },
     ]
 
+    const [copied, setCopied] = React.useState(false)
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -190,9 +196,11 @@ export function IndexLicensesTable({ licenses, applications }: { licenses: objec
         },
     })
 
-    const handleCopy = (string: string) => {
-        navigator.clipboard.writeText(string);
-    };
+    const copyToClipboard = (string: string) => {
+        navigator.clipboard.writeText(string)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+    }
 
     return (
         <div className="w-full">

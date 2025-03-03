@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Deferred, Link, router, usePage, } from '@inertiajs/react'
+import { Deferred, Head, Link, router, usePage, } from '@inertiajs/react'
 import toast from 'react-hot-toast';
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/Components/ui/card"
-import { Copy, Clock, RotateCcw, Trash2, CheckCircle, Ban, Loader2, LayoutGrid, UserRound, CircleDashed, ClockAlert, CircleHelp, Clock1, HardDrive, Check, Infinity, StickyNote } from "lucide-react"
+import { Copy, RotateCcw, Trash2, CheckCircle, Ban, Loader2, LayoutGrid, UserRound, CircleDashed, ClockAlert, CircleHelp, Clock1, HardDrive, Check, Infinity, StickyNote } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Badge } from "@/Components/ui/badge"
 import { Input } from "@/Components/ui/input"
@@ -18,6 +18,10 @@ import AddTimeDialog from '@/Components/Dialogs/AddTimeDialog';
 export default function Show({ license }: { license: object }) {
 
     const user = usePage().props.auth.user;
+
+    const canUpdate = user?.all_permissions.includes('KEYS_CREATE');
+    const canDelete = user?.all_permissions.includes('KEYS_DELETE');
+    const canResetHwid = user?.all_permissions.includes('KEYS_RESET_HWID');
     
     const [copied, setCopied] = useState(false)
     const [licenseStatus, setLicenseStatus] = useState("active")
@@ -131,11 +135,11 @@ export default function Show({ license }: { license: object }) {
 
     return (
         <AuthenticatedLayout>
+            <Head title="License Details" />
             <div className="space-y-6">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">License Key Details</h2>
+                    <h2 className="text-3xl font-bold tracking-tight">License Details</h2>
                 </div>
-
                 <Card className="mb-8">
 
                     <Deferred data="license" fallback={
@@ -255,7 +259,7 @@ export default function Show({ license }: { license: object }) {
                                     <Button
                                         className='aspect-square btn-primary size-9'
                                         onClick={handleSaveStatus}
-                                        disabled={!saveEnabled || savePending}
+                                        disabled={!saveEnabled || savePending || !canUpdate}
                                     >
                                         {savePending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check />}
                                     </Button>
@@ -268,7 +272,7 @@ export default function Show({ license }: { license: object }) {
                                             <Button
                                                 size="sm"
                                                 className="btn-primary flex items-center gap-1"
-                                                disabled={resetPending || license?.hwid === 'RESET' || license?.hwid === null}
+                                                disabled={resetPending || license?.hwid === 'RESET' || license?.hwid === null || !canResetHwid}
                                             >
                                                 {resetPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
                                                 Reset HWID
@@ -299,7 +303,7 @@ export default function Show({ license }: { license: object }) {
                                             <Button
                                                 size="sm"
                                                 className="btn-danger flex items-center gap-1"
-                                                disabled={deletePending}
+                                                disabled={deletePending || !canDelete}
                                             >
                                                 {deletePending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                                                 Delete

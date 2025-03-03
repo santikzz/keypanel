@@ -20,4 +20,9 @@ class Application extends Model
     {
         return $this->hasMany(License::class, 'app_id');
     }
+
+    public function resellerApps()
+    {
+        return $this->hasMany(ResellerApp::class, 'app_id');
+    }
 }

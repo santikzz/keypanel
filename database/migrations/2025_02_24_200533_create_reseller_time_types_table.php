@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('reseller_time_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
-            $table->foreignId('app_id')->constrained('applications', 'id')->cascadeOnDelete();
+            $table->foreignId('reseller_app_id')->constrained('reseller_apps', 'id')->onDelete('cascade');
             $table->string('name');
             $table->unsignedBigInteger('duration');
             $table->boolean('lifetime')->default(false);

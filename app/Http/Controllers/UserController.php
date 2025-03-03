@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ApplicationRequest;
 use App\Models\Application;
 use App\Models\BalanceTransaction;
+use App\Models\ResellerApp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -85,8 +86,16 @@ class UserController extends Controller
             'transactions' => fn($query) => $query->orderBy('created_at', 'desc')
         ]);
 
+        $applications = Application::where('owner_id', $user->real_owner_id)->get();
+
+        $resellerApps = ResellerApp::where('user_id', $reseller->id)
+            ->with('app', 'timeTypes')
+            ->get();
+
         return Inertia::render('Users/Reseller/Show', [
-            'reseller' => Inertia::defer(fn() => $reseller)
+            'reseller' => Inertia::defer(fn() => $reseller),
+            'resellerApps' => Inertia::defer(fn() => $resellerApps),
+            'applications' => Inertia::lazy(fn() => $applications),
         ]);
     }
 

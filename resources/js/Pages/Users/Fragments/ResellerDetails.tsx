@@ -11,7 +11,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Switch } from "@/Components/ui/switch"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/Components/ui/card"
 import { toastDark, useRandomPassword } from "@/lib/utils"
-import { Deferred, Head, router } from '@inertiajs/react';
+import { Deferred, Head, router, usePage } from '@inertiajs/react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog"
 
 const formSchema = z.object({
@@ -20,6 +20,10 @@ const formSchema = z.object({
 });
 
 export function ResellerDetails({ reseller }: { reseller: object }) {
+
+    const user = usePage().props.auth.user;
+    const canUpdate = user?.all_permissions.includes('RESELLER_UPDATE');
+    const canDelete = user?.all_permissions.includes('RESELLER_DELETE');
 
     const [isPending, setPending] = useState(false);
     const [isDeletePending, setDeletePending] = useState(false);
@@ -112,6 +116,7 @@ export function ResellerDetails({ reseller }: { reseller: object }) {
                                                     className="pe-9"
                                                     placeholder="Change password"
                                                     {...field}
+                                                    disabled={!canUpdate}
                                                 />
                                                 <button
                                                     type="button"
@@ -145,6 +150,7 @@ export function ResellerDetails({ reseller }: { reseller: object }) {
                                             <Switch
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
+                                                disabled={!canUpdate}
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -158,7 +164,7 @@ export function ResellerDetails({ reseller }: { reseller: object }) {
                                             type="button"
                                             variant='ghost'
                                             className="text-red-500/75"
-                                            disabled={isDeletePending}
+                                            disabled={isDeletePending || !canDelete}
                                         >
                                             {isDeletePending ? (
                                                 <><Loader2 className="animate-spin" />Delete</>
@@ -184,7 +190,7 @@ export function ResellerDetails({ reseller }: { reseller: object }) {
                                 <Button
                                     type="submit"
                                     className="btn-primary"
-                                    disabled={isPending}
+                                    disabled={isPending || !canUpdate}
                                 >
                                     {isPending ? (
                                         <><Loader2 className="animate-spin" /> Saving changes...</>

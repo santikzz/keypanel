@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import toast from "react-hot-toast"
-import { router } from "@inertiajs/react"
+import { router, usePage } from "@inertiajs/react"
 
 import { Button } from "@/Components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/Components/ui/dialog"
@@ -12,9 +12,7 @@ import { Calendar, Clock1, Layers, Loader2, Plus, StickyNote } from "lucide-reac
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/Components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
 import { Switch } from "@/Components/ui/switch"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/Components/ui/alert-dialog"
-import { cn, durationUnits, formatDuration, toastDark } from "@/lib/utils"
-import { Textarea } from "@headlessui/react"
+import { cn, durationUnits, toastDark } from "@/lib/utils"
 
 const formSchema = z.object({
     duration_unit: z.string(),
@@ -25,9 +23,13 @@ const formSchema = z.object({
 
 export function ShowCreateLicenseDialog({ application }: { application: object }) {
 
+    const user = usePage().props.auth.user;
+
     const [open, isOpen] = useState(false);
     const [isPending, setPending] = useState(false);
     const [isBulk, setBulk] = useState(false);
+
+    const canCreate = user?.all_permissions.includes('KEYS_CREATE');
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -59,6 +61,7 @@ export function ShowCreateLicenseDialog({ application }: { application: object }
                 <DialogTrigger asChild>
                     <Button
                         className="btn-primary"
+                        disabled={!canCreate}
                     >
                         <Plus />
                         New license

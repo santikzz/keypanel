@@ -1,8 +1,8 @@
 import React from "react"
-import { Deferred, Link } from "@inertiajs/react"
+import { Deferred, Link, router } from "@inertiajs/react"
 
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table"
-import { ArrowUpDown, Loader2, Settings } from "lucide-react"
+import { ArrowUpDown, ChevronRight, Loader2, Settings } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Input } from "@/Components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/Components/ui/table"
@@ -51,16 +51,12 @@ export function ManagersTable({ managers }: { managers: object[] }) {
             cell: ({ row }) => {
                 return (
                     <div className="flex justify-end">
-                        <Link href={route('users.showManager', row.original.id)}>
-                            <Button className="btn-primary size-8">
-                                <Settings />
-                            </Button>
-                        </Link>
+                        <ChevronRight className="text-zinc-600" />
                     </div>
                 )
             },
         },
-    ]
+    ]   
 
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -126,6 +122,8 @@ export function ManagersTable({ managers }: { managers: object[] }) {
                                     <TableRow
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
+                                        className="cursor-pointer"
+                                        onClick={() => router.visit(route('users.showManager', row.original.id))}
                                     >
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id}>

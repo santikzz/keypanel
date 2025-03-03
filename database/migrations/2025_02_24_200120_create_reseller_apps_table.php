@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('reseller_apps', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('app_id')->constrained('applications', 'id')->onDelete('cascade');
             $table->timestamps();
         });
     }

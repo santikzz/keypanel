@@ -7,6 +7,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\ResellerAppController;
+use App\Http\Controllers\ResellerTimeTypeController;
 use App\Http\Controllers\UserController;
 
 Route::get('/auth/{provider}', [OAuthController::class, 'redirect'])->where('provider', 'google|discord');
@@ -73,7 +75,12 @@ Route::middleware('auth')->group(function () {
     // balance
     Route::post('/reseller/{reseller}/setbalance', [UserController::class, 'setBalance'])->name('users.setBalance');
     Route::post('/reseller/{reseller}/addbalance', [UserController::class, 'addBalance'])->name('users.addBalance');
-
+    //reseller apps
+    Route::post('/reseller/application', [ResellerAppController::class, 'store'])->name('resellers.addApp');
+    Route::delete('/reseller/application/{reseller}', [ResellerAppController::class, 'delete'])->name('resellers.deleteApp');
+    //reseller time types
+    Route::post('/reseller/timetype', [ResellerTimeTypeController::class, 'store'])->name('resellers.addTimeType');
+    Route::delete('/reseller/timetype/{resellerTimeType}', [ResellerTimeTypeController::class, 'delete'])->name('resellers.deleteTimeType');
 });
 
 require __DIR__ . '/auth.php';

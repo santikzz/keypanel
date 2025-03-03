@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
-import { ArrowUpDown, Loader2, Plus } from "lucide-react"
+import { ArrowUpDown, ChevronRight, Loader2, Plus } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Input } from "@/Components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table"
 import { Badge } from "@/Components/ui/badge"
-import { Deferred, Link, router } from "@inertiajs/react"
+import { Deferred, Link, router, usePage } from "@inertiajs/react"
 import clsx from "clsx"
 
 export function ApplicationsTable({ applications }: {
@@ -90,7 +90,20 @@ export function ApplicationsTable({ applications }: {
                     {row.getValue("status")}
                 </Badge>
         },
+        {
+            id: "actions",
+            enableHiding: false,
+            cell: ({ row }) => {
+                return (
+                    <div className="flex justify-end">
+                        <ChevronRight className="text-zinc-600" />
+                    </div>
+                )
+            },
+        },
     ]
+
+    const user = usePage().props.auth.user;
 
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -115,11 +128,15 @@ export function ApplicationsTable({ applications }: {
         },
     })
 
+    const canCreate = user?.all_permissions.includes('APPS_CREATE');
+
     return (
         <div className="w-full">
             <div className="flex items-center py-4 gap-4">
                 <Link href={route('applications.create')}>
-                    <Button className="btn-primary">
+                    <Button
+                        disabled={!canCreate}
+                        className="btn-primary">
                         <Plus />
                         New application
                     </Button>

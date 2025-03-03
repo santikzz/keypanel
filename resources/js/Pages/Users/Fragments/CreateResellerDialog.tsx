@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { router } from "@inertiajs/react"
+import { router, usePage } from "@inertiajs/react"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -22,6 +22,9 @@ const formSchema = z.object({
 });
 
 export function CreateResellerDialog() {
+
+    const user = usePage().props.auth.user;
+    const canCreate = user?.all_permissions.includes('RESELLER_CREATE');
 
     const [open, setOpen] = useState(false);
     const [isPending, setPending] = useState(false);
@@ -55,7 +58,10 @@ export function CreateResellerDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="btn-primary hover:bg-indigo-700">
+                <Button
+                    className="btn-primary hover:bg-indigo-700"
+                    disabled={!canCreate}
+                >
                     <Plus />
                     New reseller
                 </Button>
