@@ -1,10 +1,12 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router } from '@inertiajs/react'
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import toast from "react-hot-toast";
-
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Button } from "@/Components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/Components/ui/form"

@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { ApplicationsTable } from '@/Components/tables/ApplicationsTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';

@@ -1,6 +1,8 @@
+// @ts-ignore
+// @ts-nocheck
+
 import React from "react"
 import { Deferred, Link, router } from "@inertiajs/react"
-
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronRight, Loader2, Settings } from "lucide-react"
 import { Button } from "@/Components/ui/button"

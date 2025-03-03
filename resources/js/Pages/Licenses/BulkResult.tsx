@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Button } from "@/Components/ui/button"

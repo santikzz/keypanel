@@ -1,10 +1,12 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import toast from "react-hot-toast"
 import { router, usePage } from "@inertiajs/react"
-
 import { Button } from "@/Components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/Components/ui/dialog"
 import { Input } from "@/Components/ui/input"

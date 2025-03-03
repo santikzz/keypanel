@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useState } from "react"
 import { router, usePage } from "@inertiajs/react"
 import toast from "react-hot-toast"

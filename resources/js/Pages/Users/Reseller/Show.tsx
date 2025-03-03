@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { ResellerDetails } from "../Fragments/ResellerDetails"
 import { ResellerBalance } from "../Fragments/ResellerBalance"

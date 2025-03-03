@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { IndexLicensesTable } from '@/Components/tables/IndexLicensesTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';

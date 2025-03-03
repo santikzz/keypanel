@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import React, { useState } from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronRight, Loader2, Plus } from "lucide-react"

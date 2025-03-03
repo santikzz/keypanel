@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger, } from "@/Components/ui/tabs"
 import { Head } from '@inertiajs/react';

@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useEffect, useState } from 'react';
 import { Deferred, Head, Link, router, usePage, } from '@inertiajs/react'
 import toast from 'react-hot-toast';

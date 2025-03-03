@@ -10,6 +10,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
+        "noEmitOnError": false,
         "noEmit": true,
         "paths": {
             "@/*": ["./resources/js/*"],

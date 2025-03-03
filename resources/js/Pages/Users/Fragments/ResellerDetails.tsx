@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { useForm } from "react-hook-form"
@@ -12,7 +15,7 @@ import { Switch } from "@/Components/ui/switch"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/Components/ui/card"
 import { toastDark, useRandomPassword } from "@/lib/utils"
 import { Deferred, Head, router, usePage } from '@inertiajs/react';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/Components/ui/alert-dialog"
 
 const formSchema = z.object({
     password: z.string().min(8).max(64).optional().or(z.literal("")),

@@ -1,6 +1,5 @@
 import { Header } from '@/Components/Header';
 import { Sidebar } from '@/Components/Sidebar';
-import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 import { Toaster } from "react-hot-toast";
 

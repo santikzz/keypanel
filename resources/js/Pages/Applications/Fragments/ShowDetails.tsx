@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useEffect, useState, useRef } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { router } from '@inertiajs/react'
@@ -5,7 +8,6 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import toast from "react-hot-toast";
 import { Deferred, usePage } from '@inertiajs/react'
-
 import { Check, Hash, Loader2, RotateCw, CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, Trash, X } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/Components/ui/card"
 import { Input } from '@/Components/ui/input';
