@@ -123,3 +123,7 @@
 .badge-warning {
   @apply bg-slate-900/60 text-slate-500/85 border border-slate-700/35;
 }
+
+/* .login{
+  background-image: url('/assets/waves.jpg');
+} */
