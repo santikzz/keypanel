@@ -16,7 +16,7 @@ import { router, WhenVisible } from "@inertiajs/react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/Components/ui/tooltip";
 import { IndexCreateLicenseDialog } from "@/Pages/Licenses/Fragments/IndexCreateLicenseDialog"
 
-export function IndexLicensesTable({ licenses, applications }: { licenses: object[], applications: object[] }) {
+export function IndexLicensesTable({ licenses, applications, timeOptions }: { licenses: object[], applications: object[], timeOptions: object[] }) {
 
     const columns: ColumnDef<object>[] = [
         {
@@ -57,7 +57,7 @@ export function IndexLicensesTable({ licenses, applications }: { licenses: objec
                                     variant="ghost"
                                     onClick={() => copyToClipboard(row.getValue("license_key"))}
                                     className="h-4 w-4 text-indigo-50">
-                                    {copied ? <CheckCircle/> : <Clipboard />}
+                                    {copied ? <CheckCircle /> : <Clipboard />}
                                     <span className="sr-only">Copy license key</span>
                                 </Button>
                             </TooltipTrigger>
@@ -208,7 +208,7 @@ export function IndexLicensesTable({ licenses, applications }: { licenses: objec
     return (
         <div className="w-full">
             <div className="flex items-center py-4 gap-4">
-                <IndexCreateLicenseDialog applications={applications} />
+                <IndexCreateLicenseDialog applications={applications} timeOptions={timeOptions} />
                 <Input
                     placeholder="Search..."
                     value={(table.getColumn("license_key")?.getFilterValue() as string) ?? ""}

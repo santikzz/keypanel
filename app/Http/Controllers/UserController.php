@@ -20,7 +20,7 @@ class UserController extends Controller
     /*
         Converts any string to lowercase alphanumeric without spaces
     */
-    private function parseUsername($string)
+    public static function parseUsername($string)
     {
         return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $string));
     }

@@ -9,6 +9,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\ResellerAppController;
 use App\Http\Controllers\ResellerTimeTypeController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
 
 Route::get('/auth/{provider}', [OAuthController::class, 'redirect'])->where('provider', 'google|discord');
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
     // editing applications
     Route::get('/application/{application}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
     Route::put('/application/{application}', [ApplicationController::class, 'update'])->name('applications.update');
+    Route::post('/application/renewsecret/{application}', [ApplicationController::class, 'renewSecret'])->name('applications.renewSecret');
     // deleting applications
     Route::delete('/application/{application}', [ApplicationController::class, 'delete'])->name('applications.delete');
 
@@ -81,6 +83,14 @@ Route::middleware('auth')->group(function () {
     //reseller time types
     Route::post('/reseller/timetype', [ResellerTimeTypeController::class, 'store'])->name('resellers.addTimeType');
     Route::delete('/reseller/timetype/{resellerTimeType}', [ResellerTimeTypeController::class, 'delete'])->name('resellers.deleteTimeType');
+
+    /*
+        Subscriptions
+    */
+    Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+
 });
+
+Route::post('/api/v1/verify', [LicenseController::class, 'verify'])->name('api.verify');
 
 require __DIR__ . '/auth.php';

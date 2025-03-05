@@ -10,6 +10,6 @@ class ResellerTimeType extends Model
 
     public function resellerApp()
     {
-        return $this->belongsTo(ResellerApp::class);
+        return $this->belongsTo(ResellerApp::class, 'reseller_app_id', 'id');
     }
 }

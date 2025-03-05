@@ -9,7 +9,7 @@ class Application extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['owner_id', 'app_hash_id', 'name', 'description', 'status', 'download_url'];
+    protected $fillable = ['owner_id', 'app_hash_id', 'app_secret', 'name', 'description', 'status', 'download_url'];
 
     public function owner()
     {

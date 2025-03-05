@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\BalanceTransaction;
 use App\Models\License;
+use App\Models\ResellerApp;
+use App\Models\ResellerTimeType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,6 +14,7 @@ use Inertia\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\RateLimiter;
 
 class LicenseController extends Controller
 {
@@ -35,6 +39,31 @@ class LicenseController extends Controller
         return LicenseController::$DURATION_UNITS[$unit] * $value * 3600;
     }
 
+    public static function formatDuration(int $seconds, bool $isLifetime): string
+    {
+        if ($isLifetime) {
+            return "lifetime";
+        }
+        if ($seconds < 60) {
+            return $seconds . " seconds";
+        }
+        $units = [
+            ["label" => "year", "value" => 60 * 60 * 24 * 365],
+            ["label" => "month", "value" => 60 * 60 * 24 * 30],
+            ["label" => "week", "value" => 60 * 60 * 24 * 7],
+            ["label" => "day", "value" => 60 * 60 * 24],
+            ["label" => "hour", "value" => 60 * 60],
+            ["label" => "minute", "value" => 60]
+        ];
+        foreach ($units as $unit) {
+            $amount = floor($seconds / $unit["value"]);
+            if ($amount >= 1) {
+                return $amount . " " . $unit["label"] . ($amount > 1 ? "s" : "");
+            }
+        }
+        return "$seconds seconds";
+    }
+
     public function index(): Response|RedirectResponse
     {
         $user = Auth::user();
@@ -42,18 +71,53 @@ class LicenseController extends Controller
             return redirect()->route('dashboard')->with('error', 'Not allowed.');
         }
 
+        /*
+            Pre-mke the query to get the licenses
+        */
+        $licenses = License::with('application:id,name', 'issuer:id,name')
+            ->whereHas('application', function ($query) use ($user) {
+                $query->where('owner_id', $user->real_owner_id);
+            });
+
+        /*
+            Make the query to get the applications for the owners/managers
+        */
+        $applications = Application::where('owner_id', $user->real_owner_id)->get(['id', 'name']);
+
+        $timeOptions = [];
+
+        /*
+            If the user is a reseller only show the licenses that they issued,
+            and the applications they have access to.
+        */
+        if ($user->isReseller()) {
+
+            // Add where statement to only the licenses that the reseller issued
+            $licenses->where('issued_by', $user->id);
+
+            // Get the applications that the reseller has access to
+            $applications = ResellerApp::where('user_id', $user->id)
+                ->with('app:id,name')
+                ->get()
+                ->pluck('app');
+
+            $timeOptions = ResellerTimeType::whereHas('resellerApp', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+                ->with('resellerApp')
+                ->get(['id', 'name', 'duration', 'cost', 'reseller_app_id']);
+        }
+
         return Inertia::render('Licenses/Index', [
             'licenses' => Inertia::defer(
-                fn() =>
-                License::with('application:id,name', 'issuer:id,name')
-                    ->whereHas('application', function ($query) use ($user) {
-                        $query->where('owner_id', $user->real_owner_id);
-                    })->get(),
+                // get only the needed fields for the Index table page
+                fn() => $licenses->get(['id', 'license_key', 'status', 'duration', 'activated_at', 'note', 'lifetime']),
             ),
             'applications' => Inertia::defer(
-                fn() =>
-                Application::where('owner_id', $user->real_owner_id)
-                    ->get(['id', 'name'])
+                fn() => $applications,
+            ),
+            'timeOptions' => Inertia::lazy(
+                fn() => $timeOptions,
             )
         ]);
     }
@@ -69,6 +133,13 @@ class LicenseController extends Controller
 
         if (!$user->hasPermissionTo('KEYS_READ') || $license->application->owner->id !== $user->real_owner_id) {
             return redirect()->route('dashboard')->with('error', 'Not allowed.');
+        }
+
+        /*
+            If the user is a reseller, check if the license was issued by them
+        */
+        if ($user->isReseller() && $license->issued_by !== $user->id) {
+            return redirect()->route('licenses.index')->with('error', 'Not allowed.');
         }
 
         return Inertia::render('Licenses/Show', [
@@ -87,6 +158,7 @@ class LicenseController extends Controller
             'note' => 'nullable|string',
             'is_bulk' => 'nullable|boolean',
             'bulk_amount' => 'nullable|numeric',
+            'time_option' => 'sometimes|numeric',
         ]);
 
         $application = Application::with('owner')->where('id', request('app_id'))->first();
@@ -94,21 +166,57 @@ class LicenseController extends Controller
         /*
             Check if the user has permissions to create applications
         */
-        if (!$user->hasPermissionTo('KEYS_CREATE') || $application->owner->id !== $user->real_owner_id) {
+        if (!$application || !$user->hasPermissionTo('KEYS_CREATE') || $application->owner->id !== $user->real_owner_id) {
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
+        /*
+            Calculate the duration in hours, and if it's lifetime (for owners/managers)
+        */
         $duration = $this->calculateDuration(request('duration_unit'), request('duration_value'));
         $isLifetime = request('duration_unit') == 'lifetime';
+
+        $cost = 0; // inital value for non resellers
+        $isBulk = request('is_bulk') === true;
+        $bulkAmount = request('bulk_amount') ?? 1;
+
+        /*
+            If the user is a reseller, check if they have access to the application,
+            get the duration from the time options, and calculate the duration and cost
+        */
+        if ($user->isReseller()) {
+
+            // get the relation of the reseller/application
+            $resellerApp = ResellerApp::where('user_id', $user->id)->where('app_id', $application->id)->first();
+
+            // get the time option type if exits
+            $timeOption = ResellerTimeType::where('reseller_app_id', $resellerApp->id)
+                ->where('id', request('time_option'))
+                ->first();
+
+            if (!$resellerApp || !$timeOption) {
+                return to_route('licenses.index')->with('error', 'Not allowed.');
+            }
+
+            $duration = $timeOption->duration;                              // get the duration from the time option
+            $isLifetime = false;                                            // resellers can't make lifetime keys ?
+
+            $cost = $timeOption->cost;                                      // get the cost from the time option
+            $cost = $isBulk ? $cost * $bulkAmount : $cost;                  // if it's bulk, multiply the cost by the amount of keys
+
+            // check if the reseller has enough balance
+            if ($user->balance < $cost) {
+                return to_route('licenses.index')->with('error', 'Not enough balance.');
+            }
+        }
 
         /*
             If it's a bulk create, create all keys then return a json with the keys to
             display them in a modal to easy copy to clipboard
         */
-        if (request('is_bulk') === true) {
+        if ($isBulk) {
 
             $createdLicenses = [];
-            $bulkAmount = request('bulk_amount') ?? 1;
 
             for ($i = 0; $i < $bulkAmount; $i++) {
                 $licenseKey = $this->generateKey();
@@ -123,7 +231,20 @@ class LicenseController extends Controller
                 $createdLicenses[] = $license;
             }
 
-            $application = Application::with('owner')->where('id', request('app_id'))->first();
+            // update the reseller balance
+            if ($user->isReseller()) {
+                $user->update(['balance' => $user->balance - $cost]);
+                // create a transaction log
+                BalanceTransaction::create([
+                    'user_id' => $user->id,
+                    'amount' => $cost,
+                    'type' => 'debit',
+                    'description' => 'Created (' . $bulkAmount . ') keys for ' . $application->name,
+                    'total' => $user->balance - $cost,
+                ]);
+            }
+
+            // get the application info, and redirect to the bulk display
             return Inertia::render('Licenses/BulkResult', [
                 'licenses' => $createdLicenses,
                 'application' => $application,
@@ -142,6 +263,19 @@ class LicenseController extends Controller
             'issued_by' => $user->id,
             'note' => request('note'),
         ]);
+
+        // update the reseller balance
+        if ($user->isReseller()) {
+            $user->update(['balance' => $user->balance - $cost]);
+            // create a transaction log
+            BalanceTransaction::create([
+                'user_id' => $user->id,
+                'amount' => $cost,
+                'type' => 'debit',
+                'description' => 'Created (1) keys for ' . $application->name,
+                'total' => $user->balance - $cost,
+            ]);
+        }
 
         return to_route('licenses.show', $license->id);
     }
@@ -230,5 +364,105 @@ class LicenseController extends Controller
 
         return to_route('licenses.show', $license->id)
             ->with('success', 'License updated successfully');
+    }
+
+    private function isValidSignature($license_key, $hwid, $timestamp, $app_secret, $provided_signature)
+    {
+        $message = $license_key . $hwid . $timestamp;
+        $expected_signature = hash_hmac('sha256', $message, $app_secret);
+        return hash_equals($expected_signature, $provided_signature);
+    }
+
+    public function verify(Request $request): JsonResponse
+    {
+
+        // Enforce HTTPS
+        // if (!$request->secure()) {
+        //     return response()->json(['error' => 'insecure_mehtod_not_allowed'], 403);
+        // }
+
+        // Rate limiting
+        // $rateLimitKey = "verify-license-" . $request->ip();
+        // if (RateLimiter::tooManyAttempts($rateLimitKey, 10)) {
+        //     return response()->json(['error' => 'too_many_requests'], 429);
+        // }
+        // RateLimiter::hit($rateLimitKey, 60); // 10 requests per minute
+
+        // Validate Request
+        $validated = $request->validate([
+            'app_id' => 'required|string',
+            'license_key' => 'required|string',
+            'hwid' => 'required|string|max:255',
+            'timestamp' => 'required|integer',
+            'signature' => 'required|string',
+        ]);
+
+        $license = License::where('license_key', $validated['license_key'])->first();
+        $application = Application::where('app_hash_id', $validated['app_id'])->first();
+
+        // Check if the license exists
+        if (!$license) {
+            return response()->json(['error' => 'invalid_license'], 404);
+        }
+        // Check if the application exists
+        if (!$application) {
+            return response()->json(['error' => 'invalid_application'], 404);
+        }
+        // Check if the license status is expired
+        if ($license->status === 'expired') {
+            return response()->json(['error' => 'license_expired'], 403);
+        }
+        // Check if the license status is revoked
+        if ($license->status === 'revoked') {
+            return response()->json(['error' => 'license_revoked'], 403);
+        }
+        // Check if the license is expired (if is not lifetime)
+        if ($license->lifetime === false && $license->activated_at->addHours($license->duration)->isPast()) {
+            return response()->json(['error' => 'license_expired'], 403);
+        }
+
+        /*
+            If the license is unused, activate it
+            and bind the hwid to it.
+        */
+        if ($license->status === 'unused') {
+            $license->update([
+                'status' => 'active',
+                'activated_at' => now(),
+                'hwid' => $validated['hwid'],
+            ]);
+        }
+
+        // Check hwid
+        if ($license->hwid !== 'RESET' && $license->hwid !== $validated['hwid']) {
+            return response()->json(['error' => 'hwid_mismatch'], 403);
+        }
+
+        // If the hwid is RESET, update it
+        if ($license->hwid === 'RESET') {
+            $license->update(['hwid' => $validated['hwid']]);
+        }
+
+        // Validate Signature (HMAC)
+        $isValidSignature = $this->isValidSignature(
+            $validated['license_key'],
+            $validated['hwid'],
+            $validated['timestamp'],
+            $application->secret,
+            $validated['signature']
+        );
+
+        if (!$isValidSignature) {
+            return response()->json(['error' => 'invalid_signature'], 403);
+        }
+
+        $timeLeft = $license->lifetime ? 'unlimited' : $license->time_left * 60; // in seconds
+
+        return response()->json([
+            'status' => $license->status,
+            'time_left' => $timeLeft,
+            'pretty_time_left' => $this->formatDuration($timeLeft, $license->lifetime),
+            'is_lifetime' => $license->lifetime,
+        ], 200);
     }
 }

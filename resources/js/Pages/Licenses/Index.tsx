@@ -5,7 +5,7 @@ import { IndexLicensesTable } from '@/Components/tables/IndexLicensesTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Index({ licenses, applications }: { licenses: object[], applications: object[] }) {
+export default function Index({ licenses, applications, timeOptions }: { licenses: object[], applications: object[], timeOptions: object[] }) {
     return (
         <AuthenticatedLayout>
             <Head title='Licenses Management' />
@@ -14,7 +14,7 @@ export default function Index({ licenses, applications }: { licenses: object[], 
                     <h2 className="text-3xl font-bold tracking-tight">Licenses Management</h2>
                     <p className="text-muted-foreground">View and manage your licenses</p>
                 </div>
-                <IndexLicensesTable licenses={licenses} applications={applications} />
+                <IndexLicensesTable licenses={licenses} applications={applications} timeOptions={timeOptions} />
             </div>
         </AuthenticatedLayout>
     );

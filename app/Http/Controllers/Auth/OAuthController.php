@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class OAuthController extends Controller
         $user = User::updateOrCreate(
             ['email' => $socialUser->getEmail()],
             [
-                'name' => $socialUser->getName() ?? $socialUser->getNickname(),
+                'name' => UserController::parseUsername($socialUser->getName() ?? $socialUser->getNickname()),
                 'password' => Hash::make(uniqid()), // Random password (not used)
                 'role' => 'owner', // Default role
             ]

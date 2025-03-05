@@ -34,9 +34,11 @@ export default function ShowDetails({ application }: { application: object }) {
     const [copied, setCopied] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const [isVisible, setIsVisible] = useState<boolean>(false);
+    const [renewPending, setRenewPending] = useState<boolean>(false);
 
     const canUpdate = user?.all_permissions.includes('APPS_UPDATE');
     const canDelete = user?.all_permissions.includes('APPS_DELETE');
+    const isOwner = user?.role === 'owner';
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -52,12 +54,8 @@ export default function ShowDetails({ application }: { application: object }) {
         }
     }, [application]);
 
-    const handleCopy = () => {
-        if (inputRef.current) {
-            navigator.clipboard.writeText(inputRef.current.value);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
-        }
+    const handleCopy = (string: string) => {
+        navigator.clipboard.writeText(string);
     };
 
     const toggleVisibility = () => setIsVisible((prevState) => !prevState);
@@ -85,6 +83,20 @@ export default function ShowDetails({ application }: { application: object }) {
                 toast.success('Application deleted', { style: toastDark })
             },
             onFinish: () => setDeletePending(false)
+        });
+    }
+
+    const handleRenewSecret = () => {
+        setRenewPending(true);
+        router.post(route('applications.renewSecret', application.id), {}, {
+            preserveScroll: true,
+            onError: () => {
+                toast.error('Error renewing application secret', { style: toastDark })
+            },
+            onSuccess: () => {
+                toast.success('Application secret renewed', { style: toastDark })
+            },
+            onFinish: () => setRenewPending(false)
         });
     }
 
@@ -239,39 +251,29 @@ export default function ShowDetails({ application }: { application: object }) {
                                         readOnly
                                         value={application?.app_hash_id}
                                     />
-                                    <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
-                                        <Hash size={16} aria-hidden="true" />
-                                    </div>
-                                    <TooltipProvider delayDuration={0}>
-                                        <Tooltip>
-                                            <TooltipTrigger asChild>
-                                                <button
-                                                    onClick={handleCopy}
-                                                    className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed"
-                                                    aria-label={copied ? "Copied" : "Copy to clipboard"}
-                                                    disabled={copied}
-                                                >
-                                                    <div
-                                                        className={cn(
-                                                            "transition-all",
-                                                            copied ? "scale-100 opacity-100" : "scale-0 opacity-0",
-                                                        )}
-                                                    >
-                                                        <CheckIcon className="stroke-emerald-500" size={16} aria-hidden="true" />
-                                                    </div>
-                                                    <div
-                                                        className={cn(
-                                                            "absolute transition-all",
-                                                            copied ? "scale-0 opacity-0" : "scale-100 opacity-100",
-                                                        )}
-                                                    >
-                                                        <CopyIcon size={16} aria-hidden="true" />
-                                                    </div>
-                                                </button>
-                                            </TooltipTrigger>
-                                            <TooltipContent className="px-2 py-1 text-xs">Copy to clipboard</TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
+                                    <button
+                                        onClick={() => handleCopy(application?.app_hash_id)}
+                                        className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed"
+                                        aria-label={copied ? "Copied" : "Copy to clipboard"}
+                                        disabled={copied}
+                                    >
+                                        <div
+                                            className={cn(
+                                                "transition-all",
+                                                copied ? "scale-100 opacity-100" : "scale-0 opacity-0",
+                                            )}
+                                        >
+                                            <CheckIcon className="stroke-emerald-500" size={16} aria-hidden="true" />
+                                        </div>
+                                        <div
+                                            className={cn(
+                                                "absolute transition-all",
+                                                copied ? "scale-0 opacity-0" : "scale-100 opacity-100",
+                                            )}
+                                        >
+                                            <CopyIcon size={16} aria-hidden="true" />
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
 
@@ -282,10 +284,33 @@ export default function ShowDetails({ application }: { application: object }) {
                                     <div className="relative w-full">
                                         <Input
                                             readOnly
-                                            value={application?.app_hash_id}
-                                            className="pe-9"
+                                            value={application?.app_secret}
+                                            className="pe-9 peer ps-9"
                                             type={isVisible ? "text" : "password"}
                                         />
+                                        <button
+                                            onClick={() => handleCopy(application?.app_secret)}
+                                            className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed"
+                                            aria-label={copied ? "Copied" : "Copy to clipboard"}
+                                            disabled={copied}
+                                        >
+                                            <div
+                                                className={cn(
+                                                    "transition-all",
+                                                    copied ? "scale-100 opacity-100" : "scale-0 opacity-0",
+                                                )}
+                                            >
+                                                <CheckIcon className="stroke-emerald-500" size={16} aria-hidden="true" />
+                                            </div>
+                                            <div
+                                                className={cn(
+                                                    "absolute transition-all",
+                                                    copied ? "scale-0 opacity-0" : "scale-100 opacity-100",
+                                                )}
+                                            >
+                                                <CopyIcon size={16} aria-hidden="true" />
+                                            </div>
+                                        </button>
                                         <button
                                             className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
                                             type="button"
@@ -301,14 +326,20 @@ export default function ShowDetails({ application }: { application: object }) {
                                             )}
                                         </button>
                                     </div>
-
-                                    <Button
-                                        className='btn-primary'
-                                        disabled={!canUpdate}
-                                    >
-                                        <RotateCw size={16} aria-hidden="true" />
-                                        Renew
-                                    </Button>
+                                    {isOwner && (
+                                        <Button
+                                            className='btn-primary'
+                                            disabled={!canUpdate || renewPending}
+                                            onClick={handleRenewSecret}
+                                        >
+                                            {renewPending ? (
+                                                <Loader2 className="animate-spin" />
+                                            ) : (
+                                                <RotateCw size={16} aria-hidden="true" />
+                                            )}
+                                            Renew
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </div>

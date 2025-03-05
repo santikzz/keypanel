@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('owner_id')->constrained('users', 'id')->onDelete('cascade');
             $table->string('app_hash_id', 16)->unique();
+            $table->string('app_secret', 64)->unique();
             $table->string('name');
             $table->enum('status', ['available', 'unavailable', 'hidden'])->default('available');
             $table->string('download_url', 2048)->nullable()->default(null);

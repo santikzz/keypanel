@@ -77,6 +77,7 @@ class ApplicationController extends Controller
         $application = Application::create([
             'owner_id' => $user->real_owner_id,
             'app_hash_id' => bin2hex(random_bytes(8)),
+            'app_secret' => bin2hex(random_bytes(32)),
             'name' => request('name'),
             'status' => request('status'),
             'download_url' => request('download_url'),
@@ -127,5 +128,21 @@ class ApplicationController extends Controller
         $application->delete();
         return to_route('applications.index')
             ->with('success', 'Application deleted successfully.');
+    }
+
+    public function renewSecret(Application $application): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if (!$user->isOwner()) {
+            return to_route('dashboard')->with('error', 'Not allowed.');
+        }
+
+        $application->update([
+            'app_secret' => bin2hex(random_bytes(32)),
+        ]);
+
+        return to_route('applications.show', $application->id)
+            ->with('success', 'Application secret renewed successfully.');
     }
 }
