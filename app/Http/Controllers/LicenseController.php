@@ -7,6 +7,7 @@ use App\Models\BalanceTransaction;
 use App\Models\License;
 use App\Models\ResellerApp;
 use App\Models\ResellerTimeType;
+use Carbon\CarbonInterval;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -37,31 +38,6 @@ class LicenseController extends Controller
     public static function calculateDuration(string $unit, int $value): int
     {
         return LicenseController::$DURATION_UNITS[$unit] * $value * 3600;
-    }
-
-    public static function formatDuration(int $seconds, bool $isLifetime): string
-    {
-        if ($isLifetime) {
-            return "lifetime";
-        }
-        if ($seconds < 60) {
-            return $seconds . " seconds";
-        }
-        $units = [
-            ["label" => "year", "value" => 60 * 60 * 24 * 365],
-            ["label" => "month", "value" => 60 * 60 * 24 * 30],
-            ["label" => "week", "value" => 60 * 60 * 24 * 7],
-            ["label" => "day", "value" => 60 * 60 * 24],
-            ["label" => "hour", "value" => 60 * 60],
-            ["label" => "minute", "value" => 60]
-        ];
-        foreach ($units as $unit) {
-            $amount = floor($seconds / $unit["value"]);
-            if ($amount >= 1) {
-                return $amount . " " . $unit["label"] . ($amount > 1 ? "s" : "");
-            }
-        }
-        return "$seconds seconds";
     }
 
     public function index(): Response|RedirectResponse
@@ -377,16 +353,16 @@ class LicenseController extends Controller
     {
 
         // Enforce HTTPS
-        // if (!$request->secure()) {
-        //     return response()->json(['error' => 'insecure_mehtod_not_allowed'], 403);
-        // }
+        if (!$request->secure()) {
+            return response()->json(['error' => 'insecure_mehtod_not_allowed'], 403);
+        }
 
         // Rate limiting
-        // $rateLimitKey = "verify-license-" . $request->ip();
-        // if (RateLimiter::tooManyAttempts($rateLimitKey, 10)) {
-        //     return response()->json(['error' => 'too_many_requests'], 429);
-        // }
-        // RateLimiter::hit($rateLimitKey, 60); // 10 requests per minute
+        $rateLimitKey = "verify-license-" . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 10)) {
+            return response()->json(['error' => 'too_many_requests'], 429);
+        }
+        RateLimiter::hit($rateLimitKey, 60); // 10 requests per minute
 
         // Validate Request
         $validated = $request->validate([
@@ -417,7 +393,7 @@ class LicenseController extends Controller
             return response()->json(['error' => 'license_revoked'], 403);
         }
         // Check if the license is expired (if is not lifetime)
-        if ($license->lifetime === false && $license->activated_at->addHours($license->duration)->isPast()) {
+        if ($license->lifetime === false && $license->activated_at !== null && $license->activated_at->addHours($license->duration)->isPast()) {
             return response()->json(['error' => 'license_expired'], 403);
         }
 
@@ -448,7 +424,7 @@ class LicenseController extends Controller
             $validated['license_key'],
             $validated['hwid'],
             $validated['timestamp'],
-            $application->secret,
+            $application->app_secret,
             $validated['signature']
         );
 
@@ -456,12 +432,12 @@ class LicenseController extends Controller
             return response()->json(['error' => 'invalid_signature'], 403);
         }
 
-        $timeLeft = $license->lifetime ? 'unlimited' : $license->time_left * 60; // in seconds
+        $prettyTimeLeft = $license->lifetime ? 'lifetime' : CarbonInterval::seconds($license->time_left)->cascade()->forHumans();
 
         return response()->json([
             'status' => $license->status,
-            'time_left' => $timeLeft,
-            'pretty_time_left' => $this->formatDuration($timeLeft, $license->lifetime),
+            'time_left' => $license->time_left,
+            'pretty_time_left' => $prettyTimeLeft,
             'is_lifetime' => $license->lifetime,
         ], 200);
     }

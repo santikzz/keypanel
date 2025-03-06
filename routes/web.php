@@ -91,6 +91,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::post('/api/v1/verify', [LicenseController::class, 'verify'])->name('api.verify');
+
 
 require __DIR__ . '/auth.php';

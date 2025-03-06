@@ -3,9 +3,6 @@
   "resources/js/Components/ApplicationLogo.tsx": [
     "/build/assets/GuestLayout-hZ8ryKvZ.js"
   ],
-  "resources/js/Components/Checkbox.tsx": [
-    "/build/assets/__Login-B8maMPlX.js"
-  ],
   "resources/js/Components/DangerButton.tsx": [
     "/build/assets/DeleteUserForm-D1QrXSvX.js"
   ],
@@ -136,7 +133,10 @@
     "/build/assets/ForgotPassword-BdlDpYl_.js"
   ],
   "resources/js/Pages/Auth/Login.tsx": [
-    "/build/assets/Login-BBBX8gT_.js"
+    "/build/assets/Login-Cw5C_8Nq.js"
+  ],
+  "resources/js/Pages/Auth/Login_bak.tsx": [
+    "/build/assets/Login_bak-wBC9Ag01.js"
   ],
   "resources/js/Pages/Auth/Register.tsx": [
     "/build/assets/Register-COGlFXyW.js"
@@ -146,9 +146,6 @@
   ],
   "resources/js/Pages/Auth/VerifyEmail.tsx": [
     "/build/assets/VerifyEmail-eoLwOYcY.js"
-  ],
-  "resources/js/Pages/Auth/__Login.tsx": [
-    "/build/assets/__Login-B8maMPlX.js"
   ],
   "resources/js/Pages/Dashboard.tsx": [
     "/build/assets/Dashboard-BhqyIrAm.js"

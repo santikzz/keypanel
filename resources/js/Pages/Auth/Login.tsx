@@ -63,7 +63,7 @@ export default function Login({
                                         className='peer ps-9'
                                         id="email"
                                         type="text"
-                                        placeholder="m@example.com"
+                                        placeholder="johndoe@example.net"
                                         required
                                         value={data.email}
                                         onChange={(e) => setData('email', e.target.value)}
@@ -91,6 +91,7 @@ export default function Login({
                                         type={isVisible ? "text" : "password"}
                                         id="password"
                                         name="password"
+                                        placeholder='password'
                                         value={data.password}
                                         onChange={(e) => setData('password', e.target.value)}
                                         tabIndex={2}
