@@ -15,11 +15,27 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->foreignId('plan_id')->constrained('subscription_plans', 'id')->restrictOnDelete();
-            $table->enum('status', ['active', 'canceled', 'expired'])->default('active');
-            $table->timestamp('start_date')->useCurrent();
-            $table->timestamp('end_date');
+            $table->enum('status', ['active', 'cancelled', 'expired'])->default('active');
+            $table->timestamp('starts_at');
+            $table->timestamp('ends_at')->nullable();
+            $table->string('paypal_subscription_id')->nullable(); // PayPal subscription ID
+            $table->timestamp('last_payment_date')->nullable();
             $table->timestamps();
         });
+
+        // Create PayPal payment transactions table
+        Schema::create('paypal_transactions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('subscription_id')->nullable()->constrained('user_subscriptions', 'plan_id')->onDelete('set null');
+            $table->string('paypal_transaction_id');
+            $table->decimal('amount', 10, 2);
+            $table->string('currency', 3)->default('USD');
+            $table->string('status');
+            $table->json('paypal_response');
+            $table->timestamps();
+        });
+
     }
 
     /**

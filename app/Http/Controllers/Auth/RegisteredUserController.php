@@ -44,7 +44,15 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        /*
+            Assign the owner role to the user.
+        */
         $user->assignRole('owner');
+
+        /*
+            Set the subscription plan to the Free tier
+        */
+        
 
         Auth::login($user);
 

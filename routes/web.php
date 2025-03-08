@@ -9,7 +9,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\ResellerAppController;
 use App\Http\Controllers\ResellerTimeTypeController;
-use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\UserController;
 
 Route::get('/auth/{provider}', [OAuthController::class, 'redirect'])->where('provider', 'google|discord');
@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
     /*
         Subscriptions
     */
-    Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::get('/subscriptions', [SubscriptionPlanController::class, 'index'])->name('subscriptions.index');
 
 });
 

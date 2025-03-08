@@ -79,16 +79,6 @@ class User extends Authenticatable
         return $this->role === 'reseller';
     }
 
-    // public function subscriptions()
-    // {
-    //     return $this->hasMany(UserSubscription::class);
-    // }
-
-    // public function activeSubscription()
-    // {
-    //     return $this->hasOne(UserSubscription::class)->where('status', 'active');
-    // }
-
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
@@ -122,5 +112,100 @@ class User extends Authenticatable
     public function getRealOwnerIdAttribute(): ?int
     {
         return $this->isOwner() ? $this->id : ($this->owner?->id ?? null);
+    }
+
+    /*
+        ========================= Subscription methods =========================
+    */
+    public function subscription()
+    {
+        return $this->hasOne(UserSubscription::class, 'user_id');
+    }
+
+    public function getSubscriptionPlan()
+    {
+        if ($this->hasActiveSubscription()) {
+            return $this->subscription->plan;
+        }
+        return SubscriptionPlan::getFreePlan();
+    }
+
+    public function hasActiveSubscription()
+    {
+        return $this->subscription && $this->subscription->isActive();
+    }
+
+    public function getSubscriptionDaysRemaining()
+    {
+        if (!$this->hasActiveSubscription()) {
+            return null;
+        }
+        return now()->diffInDays($this->subscription->ends_at, false);
+    }
+
+    // Check if user can create more applications
+    public function canCreateMoreApplications()
+    {
+        $plan = $this->getSubscriptionPlan();
+        return $this->applications()->count() < $plan->max_applications;
+    }
+
+    // Check if user can create more licenses
+    public function canCreateMoreLicenses()
+    {
+        $plan = $this->getSubscriptionPlan();
+        return $this->licenses()->count() < $plan->max_keys;
+    }
+
+    // Check if user can create more resellers
+    public function canCreateMoreResellers()
+    {
+        $plan = $this->getSubscriptionPlan();
+        return $this->resellers()->count() < $plan->max_resellers;
+    }
+
+    // Check if user can create more managers
+    public function canCreateMoreManagers()
+    {
+        $plan = $this->getSubscriptionPlan();
+        return $this->managers()->count() < $plan->max_managers;
+    }
+
+    public function subscribeToPlan(SubscriptionPlan $plan, $paypalSubscriptionId = null)
+    {
+
+        // Find or create a subscription
+        $subscription = UserSubscription::firstOrNew([
+            'user_id' => $this->id
+        ]);
+
+        $isNewSubscription = !$subscription->exists;
+
+        $subscription->plan_id = $plan->id;
+        $subscription->status = 'active';
+
+        if ($isNewSubscription) {
+            $subscription->starts_at = now();
+        }
+
+        if ($plan->isFree() || $paypalSubscriptionId == null) {
+            $subscription->ends_at = now()->add($plan->billing_interval, 1);
+        } else {
+            $subscription->paypal_subscription_id = $paypalSubscriptionId;
+            $subscription->last_payment_date = now();
+            $subscription->extendPeriod();
+        }
+
+        $subscription->save();
+        return $subscription;
+    }
+
+    public function assignFreePlan()
+    {
+        $freePlan = SubscriptionPlan::getFreePlan();
+        if (!$freePlan) {
+            throw new \Exception('No free plan found');
+        }
+        return $this->subscribeToPlan($freePlan);
     }
 }

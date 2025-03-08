@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SubscriptionPlan extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
         'price',
@@ -22,10 +22,21 @@ class SubscriptionPlan extends Model
 
     protected $casts = [
         'features' => 'array',
+        'price' => 'decimal:2',
     ];
 
-    public function subscriptions()
+    public function subscriptors()
     {
         return $this->hasMany(UserSubscription::class, 'plan_id');
+    }
+
+    public function getFreePlan()
+    {
+        return self::where('price', 0)->first();
+    }
+
+    public function isFree()
+    {
+        return $this->price == 0;
     }
 }
