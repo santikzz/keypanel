@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price', 10, 2);
+            $table->integer('cents');
             $table->enum('billing_interval', ['day', 'week', 'month', 'year']);
             $table->unsignedInteger('max_applications');
             $table->unsignedInteger('max_keys');

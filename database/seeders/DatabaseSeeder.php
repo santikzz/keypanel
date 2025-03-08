@@ -28,11 +28,48 @@ class DatabaseSeeder extends Seeder
         SubscriptionPlan::factory()->create([
             'name' => 'Free',
             'price' => 0,
+            'cents' => 0,
             'billing_interval' => 'month',
             'max_applications' => 1,
             'max_keys' => 5,
             'max_resellers' => 1,
             'max_managers' => 1,
+            'features' => []
+        ]);
+
+        SubscriptionPlan::factory()->create([
+            'name' => 'Tier 1',
+            'price' => 5.0,
+            'cents' => 500,
+            'billing_interval' => 'month',
+            'max_applications' => 10,
+            'max_keys' => 100,
+            'max_resellers' => 10,
+            'max_managers' => 10,
+            'features' => []
+        ]);
+
+        SubscriptionPlan::factory()->create([
+            'name' => 'Tier 2',
+            'price' => 15.0,
+            'cents' => 1500,
+            'billing_interval' => 'month',
+            'max_applications' => 100,
+            'max_keys' => 10000,
+            'max_resellers' => 50,
+            'max_managers' => 10,
+            'features' => []
+        ]);
+
+        SubscriptionPlan::factory()->create([
+            'name' => 'Tier 3',
+            'price' => 25.0,
+            'cents' => 2500,
+            'billing_interval' => 'month',
+            'max_applications' => 200,
+            'max_keys' => 100000,
+            'max_resellers' => 100,
+            'max_managers' => 10,
             'features' => []
         ]);
 
