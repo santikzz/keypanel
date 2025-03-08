@@ -29,7 +29,15 @@ class OAuthController extends Controller
             ]
         );
 
+        /*
+            Assign the owner role to the user.
+        */
         $user->assignRole('owner');
+
+        /*
+            Set the subscription plan to the Free tier
+        */
+        $user->assignFreePlan();
 
         Auth::login($user);
 
