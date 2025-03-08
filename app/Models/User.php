@@ -221,16 +221,12 @@ class User extends Authenticatable
         return $this->managers()->count() < $plan->max_managers;
     }
 
-    public function subscribeToPlan(SubscriptionPlan $plan, $paypalSubscriptionId = null)
+    public function subscribeToPlan(SubscriptionPlan $plan)
     {
-
         // Find or create a subscription
-        $subscription = UserSubscription::firstOrNew([
-            'user_id' => $this->id
-        ]);
+        $subscription = UserSubscription::firstOrNew(['user_id' => $this->id]);
 
         $isNewSubscription = !$subscription->exists;
-
         $subscription->plan_id = $plan->id;
         $subscription->status = 'active';
 
@@ -238,10 +234,26 @@ class User extends Authenticatable
             $subscription->starts_at = now();
         }
 
-        if ($plan->isFree() || $paypalSubscriptionId == null) {
-            $subscription->ends_at = now()->add($plan->billing_interval, 1);
+        if ($plan->isFree()) {
+            $subscription->ends_at = null;
         } else {
-            $subscription->paypal_subscription_id = $paypalSubscriptionId;
+            switch ($plan->billing_interval) {
+                case 'day':
+                    $subscription->ends_at = now()->addDays(1);
+                    break;
+                case 'week':
+                    $subscription->ends_at = now()->addWeeks(1);
+                    break;
+                case 'month':
+                    $subscription->ends_at = now()->addMonths(1);
+                    break;
+                case 'year':
+                    $subscription->ends_at = now()->addYears(1);
+                    break;
+                default:
+                    $subscription->ends_at = now()->addMonths(1);
+            }
+
             $subscription->last_payment_date = now();
             $subscription->extendPeriod();
         }
