@@ -27,6 +27,7 @@ export function CreateManagerDialog() {
 
     const user = usePage().props.auth.user;
     const canCreate = user?.all_permissions.includes('MANAGER_CREATE');
+    const reachedLimit = user?.managers_count >= user?.subscription.max_managers;
 
     const [open, setOpen] = useState(false)
     const [isPending, setPending] = useState(false);
@@ -59,15 +60,18 @@ export function CreateManagerDialog() {
         form.setValue("password", password);
     }
 
+    console.log(user);
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button
                     className="btn-primary hover:bg-indigo-700"
-                    disabled={!canCreate}
+                    disabled={!canCreate || reachedLimit}
                 >
                     <Plus />
                     New manager
+                    {' ('}{user?.managers_count}/{user?.subscription.max_managers}{')'}
                 </Button>
             </DialogTrigger>
             <DialogContent className="bg-zinc-950 border border-zinc-900">

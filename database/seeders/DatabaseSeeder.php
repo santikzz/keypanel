@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         SubscriptionPlan::factory()->create([
             'name' => 'Free',
             'price' => 0,
-            'billing_interval' => 'monthly',
+            'billing_interval' => 'month',
             'max_applications' => 1,
             'max_keys' => 5,
             'max_resellers' => 1,

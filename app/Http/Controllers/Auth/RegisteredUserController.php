@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
         /*
             Set the subscription plan to the Free tier
         */
-        
+        $user->assignFreePlan();
 
         Auth::login($user);
 

@@ -28,6 +28,7 @@ export function CreateResellerDialog() {
 
     const user = usePage().props.auth.user;
     const canCreate = user?.all_permissions.includes('RESELLER_CREATE');
+    const reachedLimit = user?.resellers_count >= user?.subscription.max_resellers;
 
     const [open, setOpen] = useState(false);
     const [isPending, setPending] = useState(false);
@@ -63,10 +64,11 @@ export function CreateResellerDialog() {
             <DialogTrigger asChild>
                 <Button
                     className="btn-primary hover:bg-indigo-700"
-                    disabled={!canCreate}
+                    disabled={!canCreate || reachedLimit}
                 >
                     <Plus />
                     New reseller
+                    {' ('}{user?.resellers_count}/{user?.subscription.max_resellers}{')'}
                 </Button>
             </DialogTrigger>
             <DialogContent className="bg-zinc-950 border border-zinc-900">

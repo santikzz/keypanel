@@ -146,6 +146,10 @@ class LicenseController extends Controller
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
+        if (!$user->owner()->canCreateMoreLicenses()) {
+            return to_route('applications.index')->with('error', 'You have reached the maximum number of licenses allowed.');
+        }
+
         /*
             Calculate the duration in hours, and if it's lifetime (for owners/managers)
         */

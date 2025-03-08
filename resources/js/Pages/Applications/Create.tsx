@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/Components/ui/input"
 import { Loader2, Plus } from "lucide-react"
 import { toastDark } from "@/lib/utils";
+import { Card, CardContent, CardHeader } from "@/Components/ui/card";
 
 const formSchema = z.object({
     name: z.string(),
@@ -50,85 +51,97 @@ export default function Create() {
                     <p className="text-muted-foreground">View and manage your releases</p>
                 </div>
 
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                <Card>
+                    <CardHeader>
+                        <h3 className="text-lg font-semibold">Create a new application</h3>
+                        <p className="text-muted-foreground">Create a new application to manage your releases</p>
+                    </CardHeader>
+                    <CardContent>
 
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>App name *</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Enter your application name"
-                                            type="text"
-                                            {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
 
-                        <FormField
-                            control={form.control}
-                            name="status"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Status *</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select a status" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="available">Available</SelectItem>
-                                            <SelectItem value="unavailable">Unavailable</SelectItem>
-                                            <SelectItem value="hidden">Hidden</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
 
-                        <FormField
-                            control={form.control}
-                            name="download_url"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Download URL</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="https://example.net/downloads/release.zip"
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
 
-                                            type="text"
-                                            {...field} />
-                                    </FormControl>
-                                    <FormDescription>(Optional) Download URL for launchers</FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>App name *</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Enter your application name"
+                                                    type="text"
+                                                    {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                        {/* {error && <Label className="text-red-500">{error}</Label>} */}
+                                <FormField
+                                    control={form.control}
+                                    name="status"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Status *</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a status" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="available">Available</SelectItem>
+                                                    <SelectItem value="unavailable">Unavailable</SelectItem>
+                                                    <SelectItem value="hidden">Hidden</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                        <div className="flex justify-end">
-                            <Button
-                                type="submit"
-                                className="btn-primary"
-                                disabled={isPending}
-                            >
-                                {isPending ? (
-                                    <><Loader2 className="animate-spin" />Creating app...</>
-                                ) : (
-                                    <><Plus /> Create app</>
-                                )}
-                            </Button>
-                        </div>
-                    </form>
-                </Form>
+                                <FormField
+                                    control={form.control}
+                                    name="download_url"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Download URL</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="https://example.net/downloads/release.zip"
+
+                                                    type="text"
+                                                    {...field} />
+                                            </FormControl>
+                                            <FormDescription>(Optional) Download URL for launchers</FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                {/* {error && <Label className="text-red-500">{error}</Label>} */}
+
+                                <div className="flex justify-end">
+                                    <Button
+                                        type="submit"
+                                        className="btn-primary"
+                                        disabled={isPending}
+                                    >
+                                        {isPending ? (
+                                            <><Loader2 className="animate-spin" />Creating app...</>
+                                        ) : (
+                                            <><Plus /> Create app</>
+                                        )}
+                                    </Button>
+                                </div>
+                            </form>
+                        </Form>
+
+                    </CardContent>
+                </Card>
 
             </div>
         </AuthenticatedLayout>

@@ -45,7 +45,7 @@ class User extends Authenticatable
 
     protected $with = ['roles', 'permissions'];
 
-    protected $appends = ['all_permissions'];
+    protected $appends = ['all_permissions', 'subscription', 'application_count', 'license_count', 'resellers_count', 'managers_count'];
 
     /**
      * Get the attributes that should be cast.
@@ -81,7 +81,15 @@ class User extends Authenticatable
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        if ($this->isOwner()) {
+            return $this;
+        }
+        return $this->belongsTo(User::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'owner_id');
     }
 
     public function resellers()
@@ -113,6 +121,37 @@ class User extends Authenticatable
     {
         return $this->isOwner() ? $this->id : ($this->owner?->id ?? null);
     }
+    public function getLicenseCountAttribute()
+    {
+        if ($this->isOwner()) {
+            return $this->licenses->count();
+        }
+        return $this->owner->licenses->count();
+    }
+
+    public function getManagersCountAttribute()
+    {
+        if ($this->isOwner()) {
+            return $this->managers()->count();
+        }
+        return $this->owner->managers()->count();
+    }
+
+    public function getResellersCountAttribute()
+    {
+        if ($this->isOwner()) {
+            return $this->resellers()->count();
+        }
+        return $this->owner->resellers()->count();
+    }
+
+    public function getApplicationCountAttribute()
+    {
+        if ($this->isOwner()) {
+            return $this->applications->count();
+        }
+        return $this->owner->applications->count();
+    }
 
     /*
         ========================= Subscription methods =========================
@@ -124,23 +163,34 @@ class User extends Authenticatable
 
     public function getSubscriptionPlan()
     {
-        if ($this->hasActiveSubscription()) {
-            return $this->subscription->plan;
+        $subscription = $this->getActiveSubscription();
+        if ($subscription) {
+            return $subscription->plan;
         }
         return SubscriptionPlan::getFreePlan();
     }
 
-    public function hasActiveSubscription()
+    public function getActiveSubscription()
     {
-        return $this->subscription && $this->subscription->isActive();
+        $subscription = $this->subscription()->first();
+        if ($subscription && $subscription->isActive()) {
+            return $subscription;
+        }
+        return null;
+    }
+
+    public function getSubscriptionAttribute()
+    {
+        return $this->getSubscriptionPlan();
     }
 
     public function getSubscriptionDaysRemaining()
     {
-        if (!$this->hasActiveSubscription()) {
+        $subscription = $this->getActiveSubscription();
+        if (!$subscription) {
             return null;
         }
-        return now()->diffInDays($this->subscription->ends_at, false);
+        return now()->diffInDays($subscription->ends_at, false);
     }
 
     // Check if user can create more applications

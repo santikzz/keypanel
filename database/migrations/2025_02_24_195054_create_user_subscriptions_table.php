@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::create('paypal_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
-            $table->foreignId('subscription_id')->nullable()->constrained('user_subscriptions', 'plan_id')->onDelete('set null');
+            $table->foreignId('subscription_id')->nullable()->constrained('user_subscriptions', 'id')->onDelete('set null');
             $table->string('paypal_transaction_id');
             $table->decimal('amount', 10, 2);
             $table->string('currency', 3)->default('USD');

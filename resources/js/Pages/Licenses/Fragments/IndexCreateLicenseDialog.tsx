@@ -32,6 +32,8 @@ export function IndexCreateLicenseDialog({ applications, timeOptions }: { applic
     const user = usePage().props.auth.user;
     const isReseller = user?.role === 'reseller';
     const canCreate = user?.all_permissions.includes('KEYS_CREATE');
+    const reachedLimit = user?.license_count >= user?.subscription.max_keys;
+    const keysLeft = user?.subscription.max_keys - user?.license_count;
 
     const [open, isOpen] = useState(false);
     const [isPending, setPending] = useState(false);
@@ -46,7 +48,7 @@ export function IndexCreateLicenseDialog({ applications, timeOptions }: { applic
         defaultValues: {
             duration_unit: 'days',
             duration_value: 1,
-            bulk_amount: 1
+            bulk_amount: 1,
         }
     });
 
@@ -91,6 +93,8 @@ export function IndexCreateLicenseDialog({ applications, timeOptions }: { applic
         }, [timeOptionWatch, bulkAmountWatch, isBulk])
     }
 
+    console.log(user);
+
     return (
         <>
             <Deferred data="applications" fallback={<Button className="btn-primary" disabled> <Plus />New license</Button>}>
@@ -98,8 +102,9 @@ export function IndexCreateLicenseDialog({ applications, timeOptions }: { applic
                     <DialogTrigger asChild>
                         <Button
                             className="btn-primary"
-                            disabled={!canCreate}
+                            disabled={!canCreate || reachedLimit}
                         ><Plus />New license
+                        {' ('}{user?.license_count}/{user?.subscription.max_keys}{')'}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-zinc-950 border border-zinc-900">
@@ -289,7 +294,7 @@ export function IndexCreateLicenseDialog({ applications, timeOptions }: { applic
                                                     placeholder="How many licenses you want to create?"
                                                     type="number"
                                                     min={1}
-                                                    max={256}
+                                                    max={keysLeft}
                                                     {...field}
                                                     onChange={(e) => field.onChange(Number(e.target.value) || 0)}
                                                 />

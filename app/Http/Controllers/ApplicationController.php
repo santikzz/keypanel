@@ -68,6 +68,10 @@ class ApplicationController extends Controller
             return to_route('dashboard')->with('error', 'Not allowed.');
         }
 
+        if (!$user->owner()->canCreateMoreApplications()) {
+            return to_route('applications.index')->with('error', 'You have reached the maximum number of applications allowed.');
+        }
+
         request()->validate([
             'name' => 'required|string',
             'status' => 'required|string',

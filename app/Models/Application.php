@@ -11,6 +11,8 @@ class Application extends Model
 
     protected $fillable = ['owner_id', 'app_hash_id', 'app_secret', 'name', 'description', 'status', 'download_url'];
 
+    protected $appends = ['license_count'];
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
@@ -24,5 +26,10 @@ class Application extends Model
     public function resellerApps()
     {
         return $this->hasMany(ResellerApp::class, 'app_id');
+    }
+
+    public function getLicenseCountAttribute()
+    {
+        return $this->licenses()->count();
     }
 }

@@ -55,7 +55,7 @@ export function ApplicationsTable({ applications }: {
             ),
         },
         {
-            accessorKey: "licenses_count",
+            accessorKey: "license_count",
             header: ({ column }) => {
                 return (
                     <Button
@@ -68,7 +68,7 @@ export function ApplicationsTable({ applications }: {
                 )
             },
             cell: ({ row }) => <div className="lowercase text-zinc-200">
-                {row.getValue("licenses_count")} keys
+                {row.getValue("license_count")} keys
             </div>,
         },
         {
@@ -132,16 +132,18 @@ export function ApplicationsTable({ applications }: {
     })
 
     const canCreate = user?.all_permissions.includes('APPS_CREATE');
+    const reachedLimit = user?.application_count >= user?.subscription.max_applications;
 
     return (
         <div className="w-full">
             <div className="flex items-center py-4 gap-4">
                 <Link href={route('applications.create')}>
                     <Button
-                        disabled={!canCreate}
+                        disabled={!canCreate || reachedLimit}
                         className="btn-primary">
                         <Plus />
                         New application
+                        {' ('}{user?.application_count}/{user?.subscription.max_applications}{')'}
                     </Button>
                 </Link>
                 <Input

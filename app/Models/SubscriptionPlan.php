@@ -30,7 +30,7 @@ class SubscriptionPlan extends Model
         return $this->hasMany(UserSubscription::class, 'plan_id');
     }
 
-    public function getFreePlan()
+    public static function getFreePlan()
     {
         return self::where('price', 0)->first();
     }
@@ -39,4 +39,7 @@ class SubscriptionPlan extends Model
     {
         return $this->price == 0;
     }
+
+    
+
 }

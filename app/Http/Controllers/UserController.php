@@ -109,6 +109,10 @@ class UserController extends Controller
             return redirect()->route('dashboard')->with('error', 'Not allowed.');
         }
 
+        if (!$user->owner()->canCreateMoreManagers()) {
+            return to_route('applications.index')->with('error', 'You have reached the maximum number of managers allowed.');
+        }
+
         request()->validate([
             'name' => 'required|string|min:6|max:24',
             'password' => 'required|string|min:8|max:64',
@@ -141,6 +145,10 @@ class UserController extends Controller
         */
         if (!$user->hasPermissionTo('RESELLER_CREATE')) {
             return redirect()->route('dashboard')->with('error', 'Not allowed.');
+        }
+
+        if (!$user->owner()->canCreateMoreResellers()) {
+            return to_route('applications.index')->with('error', 'You have reached the maximum number of resellers allowed.');
         }
 
         request()->validate([
