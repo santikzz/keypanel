@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class PatreonWebhookController extends Controller
 {
@@ -20,12 +21,15 @@ class PatreonWebhookController extends Controller
 
         $payload = $request->all();
         $event = $payload['data']['type'];
-
-        $patronEmail = $payload['data']['attributes']['email'] ?? null;
+        
         $pledgeAmountCents = $payload['data']['attributes']['amount_cents'] ?? 0;
+        $patronId = $payload['data']['relationships']['patron']['data']['id'];
+
+        $response = Http::withHeaders(['Authorization' => 'Bearer ' . env('PATREON_API_ACCESS_TOKEN')])
+            ->get("https://www.patreon.com/api/oauth2/v2/user/$patronId", ['fields[user]' => 'email'])->json();
+        $patronEmail = $response['data']['attributes']['email'] ?? null;
 
         if ($patronEmail) {
-
             // find the user by email
             $user = User::where('email', $patronEmail)->first();
 
@@ -34,8 +38,8 @@ class PatreonWebhookController extends Controller
                 if ($event === 'pledges:create' || $event === 'pledges:update') {
                     $plan = $this->getPlanFromPledgeAmount($pledgeAmountCents);
                     $user->subscribeToPlan($plan);
-                
-                // downgrade to free plan on cancellation
+
+                    // downgrade to free plan on cancellation
                 } elseif ($event === 'pledges:delete') {
                     $user->assignFreePlan();
                 }
@@ -46,7 +50,7 @@ class PatreonWebhookController extends Controller
     }
 
     private function getPlanFromPledgeAmount($amountCents)
-    {   
+    {
         return SubscriptionPlan::where('price', $amountCents / 100)->first();
     }
 
