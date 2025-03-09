@@ -11,76 +11,72 @@ use Illuminate\Support\Facades\Log;
 class PatreonWebhookController extends Controller
 {
 
-    public function handle(Request $request)
-    {
+    // public function handle(Request $request)
+    // {
+    //     try {
+    //         // verify the patreon signature
+    //         $signature = $request->header('X-Patreon-Signature');
 
-        try {
+    //         Log::channel('stack')->info('Patreon webhook received', ['signature' => $signature]);
 
+    //         if (!$this->verifyWebhookSignature($request->getContent(), $signature)) {
+    //             return response()->json(['error' => 'Invalid signature'], 403);
+    //         }
 
+    //         Log::channel('stack')->info('Patreon webhook verified');
 
-            // verify the patreon signature
-            $signature = $request->header('X-Patreon-Signature');
+    //         $payload = $request->all();
+    //         $event = $payload['data']['type'];
 
-            Log::channel('stack')->info('Patreon webhook received', ['signature' => $signature]);
+    //         Log::channel('stack')->info('Patreon webhook event', ['event' => $event]);
 
-            if (!$this->verifyWebhookSignature($request->getContent(), $signature)) {
-                return response()->json(['error' => 'Invalid signature'], 403);
-            }
+    //         $pledgeAmountCents = $payload['data']['attributes']['amount_cents'] ?? 0;
+    //         $patronId = $payload['data']['relationships']['patron']['data']['id'];
 
-            Log::channel('stack')->info('Patreon webhook verified');
+    //         Log::channel('stack')->info('Cents pledged', ['cents' => $pledgeAmountCents]);
+    //         Log::channel('stack')->info('Patreon webhook patron', ['patronId' => $patronId]);
 
-            $payload = $request->all();
-            $event = $payload['data']['type'];
+    //         $response = Http::withHeaders(['Authorization' => 'Bearer ' . env('PATREON_API_ACCESS_TOKEN')])
+    //             ->get("https://www.patreon.com/api/oauth2/v2/user/$patronId", ['fields[user]' => 'email'])->json();
+    //         $patronEmail = $response['data']['attributes']['email'] ?? null;
 
-            Log::channel('stack')->info('Patreon webhook event', ['event' => $event]);
+    //         Log::channel('stack')->info('Patreon webhook patron email', ['email' => $patronEmail]);
 
-            $pledgeAmountCents = $payload['data']['attributes']['amount_cents'] ?? 0;
-            $patronId = $payload['data']['relationships']['patron']['data']['id'];
+    //         if ($patronEmail) {
+    //             // find the user by email
+    //             $user = User::where('email', $patronEmail)->first();
 
-            Log::channel('stack')->info('Cents pledged', ['cents' => $pledgeAmountCents]);
-            Log::channel('stack')->info('Patreon webhook patron', ['patronId' => $patronId]);
+    //             if ($user) {
+    //                 // asign plan based on pledge amount
+    //                 if ($event === 'pledges:create' || $event === 'pledges:update') {
 
-            $response = Http::withHeaders(['Authorization' => 'Bearer ' . env('PATREON_API_ACCESS_TOKEN')])
-                ->get("https://www.patreon.com/api/oauth2/v2/user/$patronId", ['fields[user]' => 'email'])->json();
-            $patronEmail = $response['data']['attributes']['email'] ?? null;
+    //                     $plan = $this->getPlanFromPledgeAmount($pledgeAmountCents);
+    //                     $user->subscribeToPlan($plan);
 
-            Log::channel('stack')->info('Patreon webhook patron email', ['email' => $patronEmail]);
+    //                     // downgrade to free plan on cancellation
+    //                 } elseif ($event === 'pledges:delete') {
+    //                     $user->assignFreePlan();
+    //                 }
 
-            if ($patronEmail) {
-                // find the user by email
-                $user = User::where('email', $patronEmail)->first();
+    //                 $user->save();
+    //             }
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::channel('stack')->info($e->getMessage());
+    //     }
 
-                if ($user) {
-                    // asign plan based on pledge amount
-                    if ($event === 'pledges:create' || $event === 'pledges:update') {
+    //     return response()->json(['status' => 'ok']);
+    // }
 
-                        $plan = $this->getPlanFromPledgeAmount($pledgeAmountCents);
-                        $user->subscribeToPlan($plan);
+    // private function getPlanFromPledgeAmount($amountCents)
+    // {
+    //     return SubscriptionPlan::where('price', $amountCents / 100)->first();
+    // }
 
-                        // downgrade to free plan on cancellation
-                    } elseif ($event === 'pledges:delete') {
-                        $user->assignFreePlan();
-                    }
-
-                    $user->save();
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-        }
-
-        return response()->json(['status' => 'ok']);
-    }
-
-    private function getPlanFromPledgeAmount($amountCents)
-    {
-        return SubscriptionPlan::where('price', $amountCents / 100)->first();
-    }
-
-    private function verifyWebhookSignature($payload, $signature)
-    {
-        $secret = env('PATREON_WEBHOOK_SECRET');
-        $hash = hash_hmac('md5', $payload, $secret);
-        return $hash === $signature;
-    }
+    // private function verifyWebhookSignature($payload, $signature)
+    // {
+    //     $secret = env('PATREON_WEBHOOK_SECRET');
+    //     $hash = hash_hmac('md5', $payload, $secret);
+    //     return $hash === $signature;
+    // }
 }

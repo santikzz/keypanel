@@ -15,4 +15,4 @@ Route::get('health', function () {
 
 Route::post('/v1/verify', [LicenseController::class, 'verify'])->name('api.verify');
 
-Route::post('patreon/webhook', [PatreonWebhookController::class, 'handle']);
+// Route::post('patreon/webhook', [PatreonWebhookController::class, 'handle']);
