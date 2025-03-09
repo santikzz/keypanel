@@ -6,6 +6,7 @@ use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PatreonWebhookController extends Controller
 {
@@ -13,40 +14,62 @@ class PatreonWebhookController extends Controller
     public function handle(Request $request)
     {
 
-        // verify the patreon signature
-        $signature = $request->header('X-Patreon-Signature');
-        if (!$this->verifyWebhookSignature($request->getContent(), $signature)) {
-            return response()->json(['error' => 'Invalid signature'], 403);
-        }
+        try {
 
-        $payload = $request->all();
-        $event = $payload['data']['type'];
-        
-        $pledgeAmountCents = $payload['data']['attributes']['amount_cents'] ?? 0;
-        $patronId = $payload['data']['relationships']['patron']['data']['id'];
 
-        $response = Http::withHeaders(['Authorization' => 'Bearer ' . env('PATREON_API_ACCESS_TOKEN')])
-            ->get("https://www.patreon.com/api/oauth2/v2/user/$patronId", ['fields[user]' => 'email'])->json();
-        $patronEmail = $response['data']['attributes']['email'] ?? null;
 
-        if ($patronEmail) {
-            // find the user by email
-            $user = User::where('email', $patronEmail)->first();
+            // verify the patreon signature
+            $signature = $request->header('X-Patreon-Signature');
 
-            if ($user) {
-                // asign plan based on pledge amount
-                if ($event === 'pledges:create' || $event === 'pledges:update') {
-                    $plan = $this->getPlanFromPledgeAmount($pledgeAmountCents);
-                    $user->subscribeToPlan($plan);
+            Log::info('Patreon webhook received', ['signature' => $signature]);
 
-                    // downgrade to free plan on cancellation
-                } elseif ($event === 'pledges:delete') {
-                    $user->assignFreePlan();
-                }
-
-                $user->save();
+            if (!$this->verifyWebhookSignature($request->getContent(), $signature)) {
+                return response()->json(['error' => 'Invalid signature'], 403);
             }
+
+            Log::info('Patreon webhook verified');
+
+            $payload = $request->all();
+            $event = $payload['data']['type'];
+
+            Log::info('Patreon webhook event', ['event' => $event]);
+
+            $pledgeAmountCents = $payload['data']['attributes']['amount_cents'] ?? 0;
+            $patronId = $payload['data']['relationships']['patron']['data']['id'];
+
+            Log::info('Cents pledged', ['cents' => $pledgeAmountCents]);
+            Log::info('Patreon webhook patron', ['patronId' => $patronId]);
+
+            $response = Http::withHeaders(['Authorization' => 'Bearer ' . env('PATREON_API_ACCESS_TOKEN')])
+                ->get("https://www.patreon.com/api/oauth2/v2/user/$patronId", ['fields[user]' => 'email'])->json();
+            $patronEmail = $response['data']['attributes']['email'] ?? null;
+
+            Log::info('Patreon webhook patron email', ['email' => $patronEmail]);
+
+            if ($patronEmail) {
+                // find the user by email
+                $user = User::where('email', $patronEmail)->first();
+
+                if ($user) {
+                    // asign plan based on pledge amount
+                    if ($event === 'pledges:create' || $event === 'pledges:update') {
+
+                        $plan = $this->getPlanFromPledgeAmount($pledgeAmountCents);
+                        $user->subscribeToPlan($plan);
+
+                        // downgrade to free plan on cancellation
+                    } elseif ($event === 'pledges:delete') {
+                        $user->assignFreePlan();
+                    }
+
+                    $user->save();
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
         }
+
+        return response()->json(['status' => 'ok']);
     }
 
     private function getPlanFromPledgeAmount($amountCents)
