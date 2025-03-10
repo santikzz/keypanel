@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\PatreonWebhookController;
+use App\Http\Controllers\UserSubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,4 +17,5 @@ Route::get('health', function () {
 
 Route::post('/v1/verify', [LicenseController::class, 'verify'])->name('api.verify');
 
-// Route::post('patreon/webhook', [PatreonWebhookController::class, 'handle']);
+// Route::post('patreon/webhook', [PatreonController::class, 'webhook']);
+Route::post('/webhooks/patreon', [PatreonController::class, 'handle']);

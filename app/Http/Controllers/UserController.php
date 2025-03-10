@@ -327,4 +327,6 @@ class UserController extends Controller
 
         return to_route('users.showReseller', $reseller->id)->with('success', 'Balance added successfully.');
     }
+
+
 }

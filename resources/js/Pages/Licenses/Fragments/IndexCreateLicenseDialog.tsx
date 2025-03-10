@@ -32,8 +32,8 @@ export function IndexCreateLicenseDialog({ applications, timeOptions }: { applic
     const user = usePage().props.auth.user;
     const isReseller = user?.role === 'reseller';
     const canCreate = user?.all_permissions.includes('KEYS_CREATE');
-    const reachedLimit = user?.license_count >= user?.subscription.max_keys;
-    const keysLeft = user?.subscription.max_keys - user?.license_count;
+    const reachedLimit = user?.license_count >= user?.subscription.max_licenses;
+    const keysLeft = user?.subscription.max_licenses - user?.license_count;
 
     const [open, isOpen] = useState(false);
     const [isPending, setPending] = useState(false);
@@ -104,7 +104,7 @@ export function IndexCreateLicenseDialog({ applications, timeOptions }: { applic
                             className="btn-primary"
                             disabled={!canCreate || reachedLimit}
                         ><Plus />New license
-                        {' ('}{user?.license_count}/{user?.subscription.max_keys}{')'}
+                        {' ('}{user?.license_count}/{user?.subscription.max_licenses}{')'}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-zinc-950 border border-zinc-900">

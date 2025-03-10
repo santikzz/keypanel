@@ -11,6 +11,7 @@ use App\Http\Controllers\ResellerAppController;
 use App\Http\Controllers\ResellerTimeTypeController;
 use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSubscriptionController;
 
 Route::get('/auth/{provider}', [OAuthController::class, 'redirect'])->where('provider', 'google|discord');
 Route::get('/auth/{provider}/callback', [OAuthController::class, 'callback'])->where('provider', 'google|discord');
@@ -87,7 +88,10 @@ Route::middleware('auth')->group(function () {
     /*
         Subscriptions
     */
-    Route::get('/subscriptions', [SubscriptionPlanController::class, 'index'])->name('subscriptions.index');
+    Route::get('/billing', [SubscriptionPlanController::class, 'index'])->name('billing.index');
+
+    Route::get('/patreon/connect', [UserSubscriptionController::class, 'redirectToPatreon'])->name('patreon.connect');;
+    Route::get('/patreon/callback', [UserSubscriptionController::class, 'handlePatreonCallback']);
 
 });
 

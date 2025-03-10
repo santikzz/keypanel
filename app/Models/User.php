@@ -31,6 +31,11 @@ class User extends Authenticatable
         'owner_id',
         'balance',
         'disabled',
+        'plan_id',
+        'patreon_id',
+        'patreon_access_token',
+        'patreon_refresh_token',
+        'patreon_expires_at',
     ];
 
     /**
@@ -41,6 +46,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'patreon_access_token',
+        'patreon_refresh_token',
     ];
 
     protected $with = ['roles', 'permissions'];
@@ -57,7 +64,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'disabled' => 'boolean'
+            'disabled' => 'boolean',
+            'patreon_access_token' => 'encrypted',
+            'patreon_refresh_token' => 'encrypted',
         ];
     }
 
@@ -158,25 +167,16 @@ class User extends Authenticatable
     */
     public function subscription()
     {
-        return $this->hasOne(UserSubscription::class, 'user_id');
+        return $this->belongsTo(SubscriptionPlan::class, 'plan_id');
     }
 
     public function getSubscriptionPlan()
     {
-        $subscription = $this->getActiveSubscription();
-        if ($subscription) {
-            return $subscription->plan;
-        }
-        return SubscriptionPlan::getFreePlan();
-    }
-
-    public function getActiveSubscription()
-    {
         $subscription = $this->subscription()->first();
-        if ($subscription && $subscription->isActive()) {
+        if ($subscription) {
             return $subscription;
         }
-        return null;
+        return SubscriptionPlan::getFreePlan();
     }
 
     public function getSubscriptionAttribute()
@@ -184,14 +184,14 @@ class User extends Authenticatable
         return $this->getSubscriptionPlan();
     }
 
-    public function getSubscriptionDaysRemaining()
-    {
-        $subscription = $this->getActiveSubscription();
-        if (!$subscription) {
-            return null;
-        }
-        return now()->diffInDays($subscription->ends_at, false);
-    }
+    // public function getSubscriptionDaysRemaining()
+    // {
+    //     $subscription = $this->getActiveSubscription();
+    //     if (!$subscription) {
+    //         return null;
+    //     }
+    //     return now()->diffInDays($subscription->ends_at, false);
+    // }
 
     // Check if user can create more applications
     public function canCreateMoreApplications()
@@ -204,7 +204,7 @@ class User extends Authenticatable
     public function canCreateMoreLicenses()
     {
         $plan = $this->getSubscriptionPlan();
-        return $this->licenses()->count() < $plan->max_keys;
+        return $this->licenses()->count() < $plan->max_licenses;
     }
 
     // Check if user can create more resellers
@@ -224,42 +224,46 @@ class User extends Authenticatable
     public function subscribeToPlan(SubscriptionPlan $plan)
     {
         // Find or create a subscription
-        $subscription = UserSubscription::firstOrNew(['user_id' => $this->id]);
+        // $subscription = UserSubscription::firstOrNew(['user_id' => $this->id]);
 
-        $isNewSubscription = !$subscription->exists;
-        $subscription->plan_id = $plan->id;
-        $subscription->status = 'active';
+        // $isNewSubscription = !$subscription->exists;
+        // $subscription->plan_id = $plan->id;
+        // $subscription->status = 'active';
 
-        if ($isNewSubscription) {
-            $subscription->starts_at = now();
-        }
+        // if ($isNewSubscription) {
+        //     $subscription->starts_at = now();
+        // }
 
-        if ($plan->isFree()) {
-            $subscription->ends_at = null;
-        } else {
-            switch ($plan->billing_interval) {
-                case 'day':
-                    $subscription->ends_at = now()->addDays(1);
-                    break;
-                case 'week':
-                    $subscription->ends_at = now()->addWeeks(1);
-                    break;
-                case 'month':
-                    $subscription->ends_at = now()->addMonths(1);
-                    break;
-                case 'year':
-                    $subscription->ends_at = now()->addYears(1);
-                    break;
-                default:
-                    $subscription->ends_at = now()->addMonths(1);
-            }
+        // if ($plan->isFree()) {
+        //     $subscription->ends_at = null;
+        // } else {
+        //     switch ($plan->billing_interval) {
+        //         case 'day':
+        //             $subscription->ends_at = now()->addDays(1);
+        //             break;
+        //         case 'week':
+        //             $subscription->ends_at = now()->addWeeks(1);
+        //             break;
+        //         case 'month':
+        //             $subscription->ends_at = now()->addMonths(1);
+        //             break;
+        //         case 'year':
+        //             $subscription->ends_at = now()->addYears(1);
+        //             break;
+        //         default:
+        //             $subscription->ends_at = now()->addMonths(1);
+        //     }
 
-            $subscription->last_payment_date = now();
-            $subscription->extendPeriod();
-        }
+        //     $subscription->last_payment_date = now();
+        //     $subscription->extendPeriod();
+        // }
 
-        $subscription->save();
-        return $subscription;
+        // $subscription->save();
+        // return $subscription;
+
+        $this->update(['plan_id' => $plan->id]);
+        return $this;
+
     }
 
     public function assignFreePlan()

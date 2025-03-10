@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -40,6 +41,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'plan_id' => SubscriptionPlan::getFreePlan()->id
         ]);
 
         event(new Registered($user));
@@ -49,13 +51,7 @@ class RegisteredUserController extends Controller
         */
         $user->assignRole('owner');
 
-        /*
-            Set the subscription plan to the Free tier
-        */
-        $user->assignFreePlan();
-
         Auth::login($user);
-
         return redirect(route('dashboard', absolute: false));
     }
 }

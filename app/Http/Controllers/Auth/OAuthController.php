@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\UserController;
+use App\Models\SubscriptionPlan;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,7 @@ class OAuthController extends Controller
                 'name' => UserController::parseUsername($socialUser->getName() ?? $socialUser->getNickname()),
                 'password' => Hash::make(uniqid()), // Random password (not used)
                 'role' => 'owner', // Default role
+                'plan_id' => SubscriptionPlan::getFreePlan()->id
             ]
         );
 
@@ -34,13 +36,15 @@ class OAuthController extends Controller
         */
         $user->assignRole('owner');
 
-        /*
-            Set the subscription plan to the Free tier
-        */
-        $user->assignFreePlan();
-
         Auth::login($user);
-
         return redirect('/dashboard');
+    }
+
+
+    public function redirectToPatreon()
+    {
+        return Socialite::driver('patreon')
+            ->scopes(['identity', 'campaigns', 'pledges-to-me'])
+            ->redirect();
     }
 }

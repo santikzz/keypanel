@@ -35,7 +35,7 @@ return [
         ],
     ],
 
-    
+
     // socialite auth providers
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
@@ -47,6 +47,12 @@ return [
         'client_id' => env('DISCORD_CLIENT_ID'),
         'client_secret' => env('DISCORD_CLIENT_SECRET'),
         'redirect' => env('DISCORD_REDIRECT_URI'),
+    ],
+
+    'patreon' => [
+        'client_id' => env('PATREON_CLIENT_ID'),
+        'client_secret' => env('PATREON_CLIENT_SECRET'),
+        'redirect' => env('PATREON_REDIRECT_URI')
     ],
 
 ];

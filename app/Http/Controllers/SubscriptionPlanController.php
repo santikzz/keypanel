@@ -14,11 +14,11 @@ class SubscriptionPlanController extends Controller
     public function index(): Response
     {   
         $user = Auth::user();
-        $plans = SubscriptionPlan::get();
+        $plan = $user->subscription()->get();
 
-        return Inertia::render('Subscriptions/Index', [
-            'plans' => Inertia::defer(
-                fn() => $plans
+        return Inertia::render('Billing/Index', [
+            'plan' => Inertia::defer(
+                fn() => $plan
             ),
         ]);
     }

@@ -18,44 +18,36 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $user = User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => 'adminadmin'
-        ]);
-        $user->assignRole('owner');
+        $rps = new RolePermissionSeeder;
+        $rps->run();
 
-        SubscriptionPlan::factory()->create([
+        SubscriptionPlan::create([
             'name' => 'Free',
-            'price' => 0,
-            'cents' => 0,
-            'billing_interval' => 'month',
+            'is_free' => true,
             'max_applications' => 1,
-            'max_keys' => 5,
+            'max_licenses' => 5,
             'max_resellers' => 1,
             'max_managers' => 1,
             'features' => []
         ]);
 
-        SubscriptionPlan::factory()->create([
+        SubscriptionPlan::create([
             'name' => 'Tier 1',
-            'price' => 5.0,
-            'cents' => 500,
-            'billing_interval' => 'month',
+            'patreon_tier_id' => '123',
+            'patreon_cents' => 500,
             'max_applications' => 10,
-            'max_keys' => 100,
+            'max_licenses' => 100,
             'max_resellers' => 10,
             'max_managers' => 10,
             'features' => []
         ]);
 
-        SubscriptionPlan::factory()->create([
+        SubscriptionPlan::create([
             'name' => 'Tier 2',
-            'price' => 15.0,
-            'cents' => 1500,
-            'billing_interval' => 'month',
+            'patreon_tier_id' => '123',
+            'patreon_cents' => 1500,
             'max_applications' => 100,
-            'max_keys' => 10000,
+            'max_licenses' => 10000,
             'max_resellers' => 50,
             'max_managers' => 10,
             'features' => []
@@ -63,23 +55,21 @@ class DatabaseSeeder extends Seeder
 
         SubscriptionPlan::factory()->create([
             'name' => 'Tier 3',
-            'price' => 25.0,
-            'cents' => 2500,
-            'billing_interval' => 'month',
+            'patreon_tier_id' => '123',
+            'patreon_cents' => 2500,
             'max_applications' => 200,
-            'max_keys' => 100000,
+            'max_licenses' => 100000,
             'max_resellers' => 100,
             'max_managers' => 10,
             'features' => []
         ]);
 
-        // Application::factory(10)->create([
-        //     'owner_id' => $user->id  
-        // ]);
-
-        // License::factory(10)->create([
-        //     'app_id' => Application::inRandomOrder()->first()->id
-        // ]);
-
+        $user = User::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => 'adminadmin',
+            'plan_id' => SubscriptionPlan::getFreePlan()->id,
+        ]);
+        $user->assignRole('owner');
     }
 }

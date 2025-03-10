@@ -7,10 +7,10 @@
     "/build/assets/DeleteUserForm-D1QrXSvX.js"
   ],
   "resources/js/Components/Dialogs/AddTimeDialog.tsx": [
-    "/build/assets/Show-nVVjn0pL.js"
+    "/build/assets/Show-bS2NyR3P.js"
   ],
   "resources/js/Components/Header.tsx": [
-    "/build/assets/AuthenticatedLayout-CREkYVRC.js"
+    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/InputError.tsx": [
     "/build/assets/InputError-DiSBWiye.js"
@@ -28,31 +28,31 @@
     "/build/assets/DeleteUserForm-D1QrXSvX.js"
   ],
   "resources/js/Components/Sidebar.tsx": [
-    "/build/assets/AuthenticatedLayout-CREkYVRC.js"
+    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/TextInput.tsx": [
     "/build/assets/TextInput-uXC4T8wO.js"
   ],
   "resources/js/Components/tables/ApplicationsTable.tsx": [
-    "/build/assets/Index-ftUyH-du.js"
+    "/build/assets/Index-CQnpMo_w.js"
   ],
   "resources/js/Components/tables/IndexLicensesTable.tsx": [
-    "/build/assets/Index-B0Y6mmzt.js"
+    "/build/assets/Index-AmE_W2s2.js"
   ],
   "resources/js/Components/tables/ManagersTable.tsx": [
-    "/build/assets/Index-bJJTPT-3.js"
+    "/build/assets/Index-B5dtqoyG.js"
   ],
   "resources/js/Components/tables/ResellersTable.tsx": [
-    "/build/assets/Index-bJJTPT-3.js"
+    "/build/assets/Index-B5dtqoyG.js"
   ],
   "resources/js/Components/tables/ShowLicensesTable.tsx": [
-    "/build/assets/Show-BE4-wDRY.js"
+    "/build/assets/Show-Bckt9ewJ.js"
   ],
   "resources/js/Components/ui/alert-dialog.tsx": [
     "/build/assets/alert-dialog-CrhIZ7GE.js"
   ],
   "resources/js/Components/ui/avatar.tsx": [
-    "/build/assets/AuthenticatedLayout-CREkYVRC.js"
+    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/badge.tsx": [
     "/build/assets/badge-DkVXOvzh.js"
@@ -73,7 +73,7 @@
     "/build/assets/dialog-BHzYhrMl.js"
   ],
   "resources/js/Components/ui/dropdown-menu.tsx": [
-    "/build/assets/AuthenticatedLayout-CREkYVRC.js"
+    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/form.tsx": [
     "/build/assets/form-Bv0Qu0pG.js"
@@ -85,13 +85,13 @@
     "/build/assets/label-p_6QBjcN.js"
   ],
   "resources/js/Components/ui/scroll-area.tsx": [
-    "/build/assets/AuthenticatedLayout-CREkYVRC.js"
+    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/select.tsx": [
     "/build/assets/select-DpEcowDc.js"
   ],
   "resources/js/Components/ui/sheet.tsx": [
-    "/build/assets/AuthenticatedLayout-CREkYVRC.js"
+    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/switch.tsx": [
     "/build/assets/switch-Cp3w_Ulq.js"
@@ -106,13 +106,13 @@
     "/build/assets/tooltip-DG-ngQKF.js"
   ],
   "resources/js/Layouts/AuthenticatedLayout.tsx": [
-    "/build/assets/AuthenticatedLayout-CREkYVRC.js"
+    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Layouts/GuestLayout.tsx": [
     "/build/assets/GuestLayout-hZ8ryKvZ.js"
   ],
   "resources/js/Pages/Applications/Create.tsx": [
-    "/build/assets/Create-DOl4CVr8.js"
+    "/build/assets/Create-C63TuieE.js"
   ],
   "resources/js/Pages/Applications/Fragments/ShowCreateLicenseDialog.tsx": [
     "/build/assets/ShowCreateLicenseDialog-B0c2o8kf.js"
@@ -121,10 +121,10 @@
     "/build/assets/ShowDetails-D6Ar-_ZJ.js"
   ],
   "resources/js/Pages/Applications/Index.tsx": [
-    "/build/assets/Index-ftUyH-du.js"
+    "/build/assets/Index-CQnpMo_w.js"
   ],
   "resources/js/Pages/Applications/Show.tsx": [
-    "/build/assets/Show-BE4-wDRY.js"
+    "/build/assets/Show-Bckt9ewJ.js"
   ],
   "resources/js/Pages/Auth/ConfirmPassword.tsx": [
     "/build/assets/ConfirmPassword-Ftqh2WDN.js"
@@ -147,23 +147,26 @@
   "resources/js/Pages/Auth/VerifyEmail.tsx": [
     "/build/assets/VerifyEmail-eoLwOYcY.js"
   ],
+  "resources/js/Pages/Billing/Index.tsx": [
+    "/build/assets/Index-CPf4RvOS.js"
+  ],
   "resources/js/Pages/Dashboard.tsx": [
-    "/build/assets/Dashboard-BhqyIrAm.js"
+    "/build/assets/Dashboard-CYE-hkdP.js"
   ],
   "resources/js/Pages/Licenses/BulkResult.tsx": [
-    "/build/assets/BulkResult-CncbZc7B.js"
+    "/build/assets/BulkResult-wiPflnOz.js"
   ],
   "resources/js/Pages/Licenses/Fragments/IndexCreateLicenseDialog.tsx": [
-    "/build/assets/IndexCreateLicenseDialog-D8JmU4ID.js"
+    "/build/assets/IndexCreateLicenseDialog-DA5fsqwK.js"
   ],
   "resources/js/Pages/Licenses/Index.tsx": [
-    "/build/assets/Index-B0Y6mmzt.js"
+    "/build/assets/Index-AmE_W2s2.js"
   ],
   "resources/js/Pages/Licenses/Show.tsx": [
-    "/build/assets/Show-nVVjn0pL.js"
+    "/build/assets/Show-bS2NyR3P.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
-    "/build/assets/Edit-xZ69By15.js"
+    "/build/assets/Edit-BqkHwsZ4.js"
   ],
   "resources/js/Pages/Profile/Partials/DeleteUserForm.tsx": [
     "/build/assets/DeleteUserForm-D1QrXSvX.js"
@@ -173,9 +176,6 @@
   ],
   "resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.tsx": [
     "/build/assets/UpdateProfileInformationForm-BumscjlV.js"
-  ],
-  "resources/js/Pages/Subscriptions/Index.tsx": [
-    "/build/assets/Index-DsvMdDHu.js"
   ],
   "resources/js/Pages/Users/Fragments/CreateManagerDialog.tsx": [
     "/build/assets/CreateManagerDialog-DhiSudP1.js"
@@ -193,13 +193,13 @@
     "/build/assets/ResellerDetails-aTARJtKF.js"
   ],
   "resources/js/Pages/Users/Index.tsx": [
-    "/build/assets/Index-bJJTPT-3.js"
+    "/build/assets/Index-B5dtqoyG.js"
   ],
   "resources/js/Pages/Users/Manager/Show.tsx": [
-    "/build/assets/Show-DLImboCq.js"
+    "/build/assets/Show-Qvc064Qd.js"
   ],
   "resources/js/Pages/Users/Reseller/Show.tsx": [
-    "/build/assets/Show-BDTdo7JB.js"
+    "/build/assets/Show-CR_qzhj0.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
     "/build/assets/Welcome-By_mvvLX.js"

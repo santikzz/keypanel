@@ -11,10 +11,12 @@ class SubscriptionPlan extends Model
 
     protected $fillable = [
         'name',
-        'price',
-        'billing_interval',
+        'is_free',
+        // 'billing_interval',
+        'patreon_tier_id',
+        'patreon_cents',
         'max_applications',
-        'max_keys',
+        'max_licenses',
         'max_resellers',
         'max_managers',
         'features'
@@ -27,19 +29,16 @@ class SubscriptionPlan extends Model
 
     public function subscriptors()
     {
-        return $this->hasMany(UserSubscription::class, 'plan_id');
+        return $this->hasMany(User::class);
     }
 
     public static function getFreePlan()
     {
-        return self::where('price', 0)->first();
+        return self::where('is_free', true)->first();
     }
 
     public function isFree()
     {
-        return $this->price == 0;
+        return $this->is_free == 0;
     }
-
-    
-
 }

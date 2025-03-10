@@ -13,7 +13,7 @@ const menuItems = [
     { icon: Package, label: "Applications", href: "/applications", role: ["owner", "manager"] },
     { icon: KeyRound, label: "Licenses", href: "/licenses", role: ["owner", "manager", "reseller"] },
     { icon: Users, label: "Users", href: "/users", role: ["owner"] },
-    { icon: CreditCard, label: "Subscriptions", href: "/subscriptions", role: ["owner"] },
+    { icon: CreditCard, label: "Billing", href: "/billing", role: ["owner"] },
     { icon: HardDrive, label: "HWID Blacklist", href: "/blacklist", role: ["owner", "manager", "reseller"] },
     { icon: UserCog, label: "Profile", href: "/profile", role: ["owner", "manager", "reseller"] },
 ]
