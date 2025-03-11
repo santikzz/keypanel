@@ -1,211 +1,211 @@
 {
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
   "resources/js/Components/ApplicationLogo.tsx": [
-    "/build/assets/GuestLayout-hZ8ryKvZ.js"
+    "https://santikz.duckdns.org/build/assets/GuestLayout-hZ8ryKvZ.js"
   ],
   "resources/js/Components/DangerButton.tsx": [
-    "/build/assets/DeleteUserForm-D1QrXSvX.js"
+    "https://santikz.duckdns.org/build/assets/DeleteUserForm-D1QrXSvX.js"
   ],
   "resources/js/Components/Dialogs/AddTimeDialog.tsx": [
-    "/build/assets/Show-bS2NyR3P.js"
+    "https://santikz.duckdns.org/build/assets/Show-bS2NyR3P.js"
   ],
   "resources/js/Components/Header.tsx": [
-    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
+    "https://santikz.duckdns.org/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/InputError.tsx": [
-    "/build/assets/InputError-DiSBWiye.js"
+    "https://santikz.duckdns.org/build/assets/InputError-DiSBWiye.js"
   ],
   "resources/js/Components/InputLabel.tsx": [
-    "/build/assets/InputLabel-CE_n4Upz.js"
+    "https://santikz.duckdns.org/build/assets/InputLabel-CE_n4Upz.js"
   ],
   "resources/js/Components/Modal.tsx": [
-    "/build/assets/DeleteUserForm-D1QrXSvX.js"
+    "https://santikz.duckdns.org/build/assets/DeleteUserForm-D1QrXSvX.js"
   ],
   "resources/js/Components/PrimaryButton.tsx": [
-    "/build/assets/GuestLayout-hZ8ryKvZ.js"
+    "https://santikz.duckdns.org/build/assets/GuestLayout-hZ8ryKvZ.js"
   ],
   "resources/js/Components/SecondaryButton.tsx": [
-    "/build/assets/DeleteUserForm-D1QrXSvX.js"
+    "https://santikz.duckdns.org/build/assets/DeleteUserForm-D1QrXSvX.js"
   ],
   "resources/js/Components/Sidebar.tsx": [
-    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
+    "https://santikz.duckdns.org/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/TextInput.tsx": [
-    "/build/assets/TextInput-uXC4T8wO.js"
+    "https://santikz.duckdns.org/build/assets/TextInput-uXC4T8wO.js"
   ],
   "resources/js/Components/tables/ApplicationsTable.tsx": [
-    "/build/assets/Index-CQnpMo_w.js"
+    "https://santikz.duckdns.org/build/assets/Index-CQnpMo_w.js"
   ],
   "resources/js/Components/tables/IndexLicensesTable.tsx": [
-    "/build/assets/Index-AmE_W2s2.js"
+    "https://santikz.duckdns.org/build/assets/Index-AmE_W2s2.js"
   ],
   "resources/js/Components/tables/ManagersTable.tsx": [
-    "/build/assets/Index-B5dtqoyG.js"
+    "https://santikz.duckdns.org/build/assets/Index-B5dtqoyG.js"
   ],
   "resources/js/Components/tables/ResellersTable.tsx": [
-    "/build/assets/Index-B5dtqoyG.js"
+    "https://santikz.duckdns.org/build/assets/Index-B5dtqoyG.js"
   ],
   "resources/js/Components/tables/ShowLicensesTable.tsx": [
-    "/build/assets/Show-Bckt9ewJ.js"
+    "https://santikz.duckdns.org/build/assets/Show-Bckt9ewJ.js"
   ],
   "resources/js/Components/ui/alert-dialog.tsx": [
-    "/build/assets/alert-dialog-CrhIZ7GE.js"
+    "https://santikz.duckdns.org/build/assets/alert-dialog-CrhIZ7GE.js"
   ],
   "resources/js/Components/ui/avatar.tsx": [
-    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
+    "https://santikz.duckdns.org/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/badge.tsx": [
-    "/build/assets/badge-DkVXOvzh.js"
+    "https://santikz.duckdns.org/build/assets/badge-DkVXOvzh.js"
   ],
   "resources/js/Components/ui/button.tsx": [
-    "/build/assets/button-CmMv2gJh.js"
+    "https://santikz.duckdns.org/build/assets/button-CmMv2gJh.js"
   ],
   "resources/js/Components/ui/card.tsx": [
-    "/build/assets/card-H30tULAN.js"
+    "https://santikz.duckdns.org/build/assets/card-H30tULAN.js"
   ],
   "resources/js/Components/ui/checkbox.tsx": [
-    "/build/assets/checkbox-DqkbCq-q.js"
+    "https://santikz.duckdns.org/build/assets/checkbox-DqkbCq-q.js"
   ],
   "resources/js/Components/ui/collapsible.tsx": [
-    "/build/assets/ResellerApplications-DDGzhWkQ.js"
+    "https://santikz.duckdns.org/build/assets/ResellerApplications-DDGzhWkQ.js"
   ],
   "resources/js/Components/ui/dialog.tsx": [
-    "/build/assets/dialog-BHzYhrMl.js"
+    "https://santikz.duckdns.org/build/assets/dialog-BHzYhrMl.js"
   ],
   "resources/js/Components/ui/dropdown-menu.tsx": [
-    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
+    "https://santikz.duckdns.org/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/form.tsx": [
-    "/build/assets/form-Bv0Qu0pG.js"
+    "https://santikz.duckdns.org/build/assets/form-Bv0Qu0pG.js"
   ],
   "resources/js/Components/ui/input.tsx": [
-    "/build/assets/input-DkJ2G5pj.js"
+    "https://santikz.duckdns.org/build/assets/input-DkJ2G5pj.js"
   ],
   "resources/js/Components/ui/label.tsx": [
-    "/build/assets/label-p_6QBjcN.js"
+    "https://santikz.duckdns.org/build/assets/label-p_6QBjcN.js"
   ],
   "resources/js/Components/ui/scroll-area.tsx": [
-    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
+    "https://santikz.duckdns.org/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/select.tsx": [
-    "/build/assets/select-DpEcowDc.js"
+    "https://santikz.duckdns.org/build/assets/select-DpEcowDc.js"
   ],
   "resources/js/Components/ui/sheet.tsx": [
-    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
+    "https://santikz.duckdns.org/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Components/ui/switch.tsx": [
-    "/build/assets/switch-Cp3w_Ulq.js"
+    "https://santikz.duckdns.org/build/assets/switch-Cp3w_Ulq.js"
   ],
   "resources/js/Components/ui/table.tsx": [
-    "/build/assets/table-DYKmrJXP.js"
+    "https://santikz.duckdns.org/build/assets/table-DYKmrJXP.js"
   ],
   "resources/js/Components/ui/tabs.tsx": [
-    "/build/assets/tabs-DSJtbVSd.js"
+    "https://santikz.duckdns.org/build/assets/tabs-DSJtbVSd.js"
   ],
   "resources/js/Components/ui/tooltip.tsx": [
-    "/build/assets/tooltip-DG-ngQKF.js"
+    "https://santikz.duckdns.org/build/assets/tooltip-DG-ngQKF.js"
   ],
   "resources/js/Layouts/AuthenticatedLayout.tsx": [
-    "/build/assets/AuthenticatedLayout-DpU-xXnC.js"
+    "https://santikz.duckdns.org/build/assets/AuthenticatedLayout-DpU-xXnC.js"
   ],
   "resources/js/Layouts/GuestLayout.tsx": [
-    "/build/assets/GuestLayout-hZ8ryKvZ.js"
+    "https://santikz.duckdns.org/build/assets/GuestLayout-hZ8ryKvZ.js"
   ],
   "resources/js/Pages/Applications/Create.tsx": [
-    "/build/assets/Create-C63TuieE.js"
+    "https://santikz.duckdns.org/build/assets/Create-C63TuieE.js"
   ],
   "resources/js/Pages/Applications/Fragments/ShowCreateLicenseDialog.tsx": [
-    "/build/assets/ShowCreateLicenseDialog-B0c2o8kf.js"
+    "https://santikz.duckdns.org/build/assets/ShowCreateLicenseDialog-B0c2o8kf.js"
   ],
   "resources/js/Pages/Applications/Fragments/ShowDetails.tsx": [
-    "/build/assets/ShowDetails-D6Ar-_ZJ.js"
+    "https://santikz.duckdns.org/build/assets/ShowDetails-D6Ar-_ZJ.js"
   ],
   "resources/js/Pages/Applications/Index.tsx": [
-    "/build/assets/Index-CQnpMo_w.js"
+    "https://santikz.duckdns.org/build/assets/Index-CQnpMo_w.js"
   ],
   "resources/js/Pages/Applications/Show.tsx": [
-    "/build/assets/Show-Bckt9ewJ.js"
+    "https://santikz.duckdns.org/build/assets/Show-Bckt9ewJ.js"
   ],
   "resources/js/Pages/Auth/ConfirmPassword.tsx": [
-    "/build/assets/ConfirmPassword-Ftqh2WDN.js"
+    "https://santikz.duckdns.org/build/assets/ConfirmPassword-Ftqh2WDN.js"
   ],
   "resources/js/Pages/Auth/ForgotPassword.tsx": [
-    "/build/assets/ForgotPassword-BdlDpYl_.js"
+    "https://santikz.duckdns.org/build/assets/ForgotPassword-BdlDpYl_.js"
   ],
   "resources/js/Pages/Auth/Login.tsx": [
-    "/build/assets/Login-Dfdxwrsf.js"
+    "https://santikz.duckdns.org/build/assets/Login-Dfdxwrsf.js"
   ],
   "resources/js/Pages/Auth/Login_bak.tsx": [
-    "/build/assets/Login_bak-COWQr02c.js"
+    "https://santikz.duckdns.org/build/assets/Login_bak-COWQr02c.js"
   ],
   "resources/js/Pages/Auth/Register.tsx": [
-    "/build/assets/Register-COGlFXyW.js"
+    "https://santikz.duckdns.org/build/assets/Register-COGlFXyW.js"
   ],
   "resources/js/Pages/Auth/ResetPassword.tsx": [
-    "/build/assets/ResetPassword-Iwa2pGiT.js"
+    "https://santikz.duckdns.org/build/assets/ResetPassword-Iwa2pGiT.js"
   ],
   "resources/js/Pages/Auth/VerifyEmail.tsx": [
-    "/build/assets/VerifyEmail-eoLwOYcY.js"
+    "https://santikz.duckdns.org/build/assets/VerifyEmail-eoLwOYcY.js"
   ],
   "resources/js/Pages/Billing/Index.tsx": [
-    "/build/assets/Index-CPf4RvOS.js"
+    "https://santikz.duckdns.org/build/assets/Index-BwnmJ_wD.js"
   ],
   "resources/js/Pages/Dashboard.tsx": [
-    "/build/assets/Dashboard-CYE-hkdP.js"
+    "https://santikz.duckdns.org/build/assets/Dashboard-CYE-hkdP.js"
   ],
   "resources/js/Pages/Licenses/BulkResult.tsx": [
-    "/build/assets/BulkResult-wiPflnOz.js"
+    "https://santikz.duckdns.org/build/assets/BulkResult-wiPflnOz.js"
   ],
   "resources/js/Pages/Licenses/Fragments/IndexCreateLicenseDialog.tsx": [
-    "/build/assets/IndexCreateLicenseDialog-DA5fsqwK.js"
+    "https://santikz.duckdns.org/build/assets/IndexCreateLicenseDialog-DA5fsqwK.js"
   ],
   "resources/js/Pages/Licenses/Index.tsx": [
-    "/build/assets/Index-AmE_W2s2.js"
+    "https://santikz.duckdns.org/build/assets/Index-AmE_W2s2.js"
   ],
   "resources/js/Pages/Licenses/Show.tsx": [
-    "/build/assets/Show-bS2NyR3P.js"
+    "https://santikz.duckdns.org/build/assets/Show-bS2NyR3P.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
-    "/build/assets/Edit-BqkHwsZ4.js"
+    "https://santikz.duckdns.org/build/assets/Edit-BqkHwsZ4.js"
   ],
   "resources/js/Pages/Profile/Partials/DeleteUserForm.tsx": [
-    "/build/assets/DeleteUserForm-D1QrXSvX.js"
+    "https://santikz.duckdns.org/build/assets/DeleteUserForm-D1QrXSvX.js"
   ],
   "resources/js/Pages/Profile/Partials/UpdatePasswordForm.tsx": [
-    "/build/assets/UpdatePasswordForm-BSMjxyQB.js"
+    "https://santikz.duckdns.org/build/assets/UpdatePasswordForm-BSMjxyQB.js"
   ],
   "resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.tsx": [
-    "/build/assets/UpdateProfileInformationForm-BumscjlV.js"
+    "https://santikz.duckdns.org/build/assets/UpdateProfileInformationForm-BumscjlV.js"
   ],
   "resources/js/Pages/Users/Fragments/CreateManagerDialog.tsx": [
-    "/build/assets/CreateManagerDialog-DhiSudP1.js"
+    "https://santikz.duckdns.org/build/assets/CreateManagerDialog-DhiSudP1.js"
   ],
   "resources/js/Pages/Users/Fragments/CreateResellerDialog.tsx": [
-    "/build/assets/CreateResellerDialog--VXfOOyC.js"
+    "https://santikz.duckdns.org/build/assets/CreateResellerDialog--VXfOOyC.js"
   ],
   "resources/js/Pages/Users/Fragments/ResellerApplications.tsx": [
-    "/build/assets/ResellerApplications-DDGzhWkQ.js"
+    "https://santikz.duckdns.org/build/assets/ResellerApplications-DDGzhWkQ.js"
   ],
   "resources/js/Pages/Users/Fragments/ResellerBalance.tsx": [
-    "/build/assets/ResellerBalance-DEBXqsS5.js"
+    "https://santikz.duckdns.org/build/assets/ResellerBalance-DEBXqsS5.js"
   ],
   "resources/js/Pages/Users/Fragments/ResellerDetails.tsx": [
-    "/build/assets/ResellerDetails-aTARJtKF.js"
+    "https://santikz.duckdns.org/build/assets/ResellerDetails-aTARJtKF.js"
   ],
   "resources/js/Pages/Users/Index.tsx": [
-    "/build/assets/Index-B5dtqoyG.js"
+    "https://santikz.duckdns.org/build/assets/Index-B5dtqoyG.js"
   ],
   "resources/js/Pages/Users/Manager/Show.tsx": [
-    "/build/assets/Show-Qvc064Qd.js"
+    "https://santikz.duckdns.org/build/assets/Show-Qvc064Qd.js"
   ],
   "resources/js/Pages/Users/Reseller/Show.tsx": [
-    "/build/assets/Show-CR_qzhj0.js"
+    "https://santikz.duckdns.org/build/assets/Show-CR_qzhj0.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
-    "/build/assets/Welcome-By_mvvLX.js"
+    "https://santikz.duckdns.org/build/assets/Welcome-By_mvvLX.js"
   ],
   "resources/js/lib/utils.ts": [
-    "/build/assets/button-CmMv2gJh.js"
+    "https://santikz.duckdns.org/build/assets/button-CmMv2gJh.js"
   ],
   "resources/js/ssr.tsx": [],
   "vendor/tightenco/ziggy/dist/index.js": []

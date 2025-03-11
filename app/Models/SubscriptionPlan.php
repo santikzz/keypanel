@@ -12,9 +12,9 @@ class SubscriptionPlan extends Model
     protected $fillable = [
         'name',
         'is_free',
-        // 'billing_interval',
-        'patreon_tier_id',
-        'patreon_cents',
+        'price',
+        'billing_interval',
+        'interval_count',
         'max_applications',
         'max_licenses',
         'max_resellers',
@@ -25,6 +25,7 @@ class SubscriptionPlan extends Model
     protected $casts = [
         'features' => 'array',
         'price' => 'decimal:2',
+        'is_free' => 'boolean'
     ];
 
     public function subscriptors()
@@ -39,6 +40,6 @@ class SubscriptionPlan extends Model
 
     public function isFree()
     {
-        return $this->is_free == 0;
+        return $this->is_free === true;
     }
 }

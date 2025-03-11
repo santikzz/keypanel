@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('is_free')->default(false);
-            $table->string('patreon_tier_id')->nullable();
-            $table->unsignedInteger('patreon_cents')->nullable();
-            // $table->enum('billing_interval', ['day', 'week', 'month', 'year']);
+            $table->decimal('price', 10, 2);
+            $table->string('billing_interval');
+            $table->integer('interval_count')->default(1);
             $table->unsignedInteger('max_applications');
             $table->unsignedInteger('max_licenses');
             $table->unsignedInteger('max_resellers');

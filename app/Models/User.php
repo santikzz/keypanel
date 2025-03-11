@@ -32,10 +32,8 @@ class User extends Authenticatable
         'balance',
         'disabled',
         'plan_id',
-        'patreon_id',
-        'patreon_access_token',
-        'patreon_refresh_token',
-        'patreon_expires_at',
+        'paypal_subscription_id',
+        'subscription_ends_at',
     ];
 
     /**
@@ -46,8 +44,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'patreon_access_token',
-        'patreon_refresh_token',
     ];
 
     protected $with = ['roles', 'permissions'];
@@ -65,8 +61,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'disabled' => 'boolean',
-            'patreon_access_token' => 'encrypted',
-            'patreon_refresh_token' => 'encrypted',
         ];
     }
 
@@ -263,7 +257,6 @@ class User extends Authenticatable
 
         $this->update(['plan_id' => $plan->id]);
         return $this;
-
     }
 
     public function assignFreePlan()

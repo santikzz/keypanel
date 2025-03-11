@@ -89,9 +89,7 @@ Route::middleware('auth')->group(function () {
         Subscriptions
     */
     Route::get('/billing', [SubscriptionPlanController::class, 'index'])->name('billing.index');
-
-    Route::get('/patreon/connect', [UserSubscriptionController::class, 'redirectToPatreon'])->name('patreon.connect');;
-    Route::get('/patreon/callback', [UserSubscriptionController::class, 'handlePatreonCallback']);
+    Route::post('/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');
 
 });
 

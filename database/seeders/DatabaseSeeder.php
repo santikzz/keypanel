@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
         SubscriptionPlan::create([
             'name' => 'Free',
             'is_free' => true,
+            'price' => 0,
+            'billing_interval' => 'month',
+            'interval_count' => 1,
             'max_applications' => 1,
             'max_licenses' => 5,
             'max_resellers' => 1,
@@ -33,8 +36,9 @@ class DatabaseSeeder extends Seeder
 
         SubscriptionPlan::create([
             'name' => 'Tier 1',
-            'patreon_tier_id' => '123',
-            'patreon_cents' => 500,
+            'price' => 5.0,
+            'billing_interval' => 'month',
+            'interval_count' => 1,
             'max_applications' => 10,
             'max_licenses' => 100,
             'max_resellers' => 10,
@@ -44,8 +48,9 @@ class DatabaseSeeder extends Seeder
 
         SubscriptionPlan::create([
             'name' => 'Tier 2',
-            'patreon_tier_id' => '123',
-            'patreon_cents' => 1500,
+            'price' => 15.0,
+            'billing_interval' => 'month',
+            'interval_count' => 1,
             'max_applications' => 100,
             'max_licenses' => 10000,
             'max_resellers' => 50,
@@ -55,8 +60,9 @@ class DatabaseSeeder extends Seeder
 
         SubscriptionPlan::factory()->create([
             'name' => 'Tier 3',
-            'patreon_tier_id' => '123',
-            'patreon_cents' => 2500,
+            'price' => 25.0,
+            'billing_interval' => 'month',
+            'interval_count' => 1,
             'max_applications' => 200,
             'max_licenses' => 100000,
             'max_resellers' => 100,

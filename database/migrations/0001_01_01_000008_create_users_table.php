@@ -21,12 +21,13 @@ return new class extends Migration
             $table->foreignId('owner_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->decimal('balance', 10, 2)->default(0.00);
             $table->boolean('disabled')->default(false);
-
-            $table->string('patreon_id')->nullable()->unique();
-            $table->string('patreon_access_token')->nullable();
-            $table->string('patreon_refresh_token')->nullable();
-            $table->timestamp('patreon_expires_at')->nullable();
+            // $table->string('patreon_id')->nullable()->unique();
+            // $table->string('patreon_access_token')->nullable();
+            // $table->string('patreon_refresh_token')->nullable();
+            // $table->timestamp('patreon_expires_at')->nullable();
             $table->foreignId('plan_id')->nullable()->nullOnDelete();
+            $table->string('paypal_subscription_id')->nullable();
+            $table->timestamp('subscription_ends_at')->nullable();
 
             $table->rememberToken();
             $table->timestamps();
