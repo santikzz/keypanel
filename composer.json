@@ -13,7 +13,6 @@
         "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.10.1",
         "socialiteproviders/discord": "^4.2",
-        "socialiteproviders/patreon": "^5.0",
         "spatie/laravel-permission": "^6.15",
         "tightenco/ziggy": "^2.0"
     },
