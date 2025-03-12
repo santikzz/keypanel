@@ -252,8 +252,3 @@ class PayPalController extends Controller
         return $response->json()['access_token'];
     }
 }
-
-
-ba_token=BA-7XP51364H3035084U
-&subscription_id=I-BWWSRE6MG7EA
-&token=1FX61428BG809563E
