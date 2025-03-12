@@ -17,4 +17,6 @@ Route::get('health', function () {
 
 Route::post('/v1/verify', [LicenseController::class, 'verify'])->name('api.verify');
 
+Route::post('/subscribe', [PayPalController::class, 'subscribe'])->name('plans.subscribe');
 Route::post('/webhook/paypal', [PayPalController::class, 'handleWebhook'])->name('webhook.paypal');
+

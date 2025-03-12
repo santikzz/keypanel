@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('balance', 10, 2)->default(0.00);
             $table->boolean('disabled')->default(false);
             $table->foreignId('plan_id')->nullable()->nullOnDelete();
+            $table->foreignId('pending_plan_id')->nullable()->nullOnDelete();
             $table->string('paypal_subscription_id')->nullable();
             $table->timestamp('subscription_ends_at')->nullable();
 

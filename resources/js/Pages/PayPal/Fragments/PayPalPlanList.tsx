@@ -15,33 +15,36 @@ export function PayPalPlanList({ pp_plans }: { pp_plans: object[] }) {
     const user = usePage().props.auth.user;
 
     const createPlanRequestBase = `{
-  "product_id": "PROD-02484232WP582913W",
-  "name": "KeyCore Tier 1",
-  "description": "KeyCore Tier 1",
-  "status": "ACTIVE",
-  "billing_cycles": [
-    {
-      "frequency": {
-        "interval_unit": "MONTH",
-        "interval_count": 1
-      },
-      "tenure_type": "REGULAR",
-      "sequence": 1,
-      "total_cycles": 1,
-      "pricing_scheme": {
-        "fixed_price": {
-          "value": "3",
-          "currency_code": "USD"
+    "product_id": "PROD-02484232WP582913W",
+    "name": "KeyCore",
+    "description": "KeyCore",
+    "status": "ACTIVE",
+    "billing_cycles": [
+      {
+        "frequency": {
+          "interval_unit": "MONTH",
+          "interval_count": 1
+        },
+        "tenure_type": "REGULAR",
+        "sequence": 1,
+        "pricing_scheme": {
+          "fixed_price": {
+            "value": "10",
+            "currency_code": "USD"
+          }
         }
       }
+    ],
+    "payment_preferences": {
+      "auto_bill_outstanding": true,
+      "setup_fee": {
+        "value": "10",
+        "currency_code": "USD"
+      },
+      "setup_fee_failure_action": "CANCEL",
+      "payment_failure_threshold": 3
     }
-  ],
-  "payment_preferences": {
-    "auto_bill_outstanding": true,
-    "setup_fee_failure_action": "CANCEL",
-    "payment_failure_threshold": 3
-  }
-}`;
+  }`;
 
     const [createPlanRequest, setCreatePlanRequest] = useState(createPlanRequestBase);
     const [createPending, setCreatePending] = useState(false);

@@ -32,6 +32,7 @@ class User extends Authenticatable
         'balance',
         'disabled',
         'plan_id',
+        'pending_plan_id',
         'paypal_subscription_id',
         'subscription_ends_at',
     ];

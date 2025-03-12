@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -97,7 +98,7 @@ class PayPalController extends Controller
         return back()->withErrors(['error' => 'Failed to create plan.']);
     }
 
-    public function subscribe(Request $request)
+    public function subscribe(Request $request): JsonResponse
     {
         $user = Auth::user();
         $plan = SubscriptionPlan::findOrFail(request('plan_id'));
@@ -161,20 +162,20 @@ class PayPalController extends Controller
         //   }
 
         // PAYMENT APPROVE
-        // returnUrl?subscription_id=I-37FWBT6U05LU&ba_token=BA-3JS71114TF809332K&token=2C126125X9437240T
+        // returnUrl? subscription_id=I-37FWBT6U05LU &ba_token=BA-3JS71114TF809332K &token=2C126125X9437240T
 
         $subscription = $response->json();
 
         Log::info($subscription);
 
         $user->update([
-            // 'plan_id' => $plan->id,
+            'pending_plan_id' => $plan->id,
             'paypal_subscription_id' => $subscription['id'],
             // 'subscription_ends_at' => $this->getPeriod($plan->billing_interval, $plan->interval_count),
         ]);
 
         $approvalUrl = $subscription['links'][0]['href'];
-        return redirect()->away($approvalUrl);
+        return response()->json(['approval_url' => $approvalUrl]);
     }
 
     public function getPeriod(string $billingInterval, int $intervalCount)
@@ -211,6 +212,8 @@ class PayPalController extends Controller
             $user = User::where('paypal_subscription_id', $event['resource']['billing_agreement_id'])->first();
             if ($user) {
                 $user->update([
+                    'plan_id' => $user->pending_plan_id,
+                    'pending_plan_id' => null,
                     'subscription_ends_at' => $this->getPeriod($user->plan->billing_interval, $user->plan->interval_count),
                 ]);
             }

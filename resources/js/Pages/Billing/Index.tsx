@@ -14,6 +14,10 @@ export default function Index({ plans }: { plans: object[] }) {
     const handleSubscribe = (planId: number) => {
         router.post(route('plans.subscribe'), {
             plan_id: planId,
+        }, {
+            onSuccess: (data) => {
+                window.location.href = data.approval_url;
+            }
         });
     }
 
