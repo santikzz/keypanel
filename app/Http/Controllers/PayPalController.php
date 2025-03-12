@@ -99,7 +99,10 @@ class PayPalController extends Controller
     }
 
     public function subscribe(Request $request)
-    {
+    {   
+
+        Log::info('==== PAYPAL SUBSCRIPTION =================================================================================================================================');
+
         $user = Auth::user();
         $plan = SubscriptionPlan::findOrFail(request('plan_id'));
 
@@ -117,6 +120,7 @@ class PayPalController extends Controller
                 'subscriber' => [
                     'email_address' => $user->email,
                 ],
+                'custom_id' => $plan->paypal_plan_id,
                 'application_context' => [
                     'return_url' => route('billing.index'),
                     'cancel_url' => route('billing.index'),
@@ -209,7 +213,7 @@ class PayPalController extends Controller
             If the event is a payment completed event, we extend the user's subscription end date
         */
         if ($event['event_type'] === 'PAYMENT.SALE.COMPLETED') {
-            $user = User::where('paypal_subscription_id', $event['resource']['billing_agreement_id'])->first();
+            $user = User::where('paypal_subscription_id', $event['resource']['custom_id'])->first();
             if ($user) {
                 $user->update([
                     'plan_id' => $user->pending_plan_id,
@@ -248,3 +252,8 @@ class PayPalController extends Controller
         return $response->json()['access_token'];
     }
 }
+
+
+ba_token=BA-7XP51364H3035084U
+&subscription_id=I-BWWSRE6MG7EA
+&token=1FX61428BG809563E
