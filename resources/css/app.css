@@ -108,6 +108,18 @@
   @apply focus:bg-rose-800/75;
 }
 
+.btn-success {
+  @apply bg-emerald-600/50 text-emerald-200 border border-emerald-700/75;
+}
+
+.btn-success:hover {
+  @apply hover:bg-emerald-600/75;
+}
+
+.btn-success:focus {
+  @apply focus:bg-emerald-800/75;
+}
+
 .badge-primary {
   @apply bg-indigo-900/60 text-indigo-500/85 border border-indigo-700/35;
 }

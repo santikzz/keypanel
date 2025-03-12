@@ -24,6 +24,7 @@ return new class extends Migration
             $table->unsignedInteger('max_resellers');
             $table->unsignedInteger('max_managers');
             $table->json('features');
+            $table->boolean('is_visible')->default(true);
             $table->timestamps();
         });
     }

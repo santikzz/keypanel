@@ -27,12 +27,18 @@ class PayPalController extends Controller
 
     public function index()
     {
-        $products = $this->getProducts();
-        $plans = $this->getPlans();
+        // $products = $this->getProducts();
+        // $plans = $this->getPlans();
+        $pp_products = [];
+        $pp_plans = [];
+        $plans = SubscriptionPlan::where('is_free', false)->get();
 
         return Inertia::render('PayPal/Index', [
-            'products' => Inertia::defer(
-                fn() => $products
+            'pp_products' => Inertia::defer(
+                fn() => $pp_products
+            ),
+            'pp_plans' => Inertia::defer(
+                fn() => $pp_plans
             ),
             'plans' => Inertia::defer(
                 fn() => $plans
@@ -116,14 +122,55 @@ class PayPalController extends Controller
                 ],
             ]);
 
+        // ============ REQUEST ============
+        // {
+        //     "plan_id": "P-5ML4271244454362WXNWU5NQ",
+        //     "start_time": "2025-11-11T00:00:00Z",
+        //     "subscriber": {
+        //       "email_address": "customer@example.com"
+        //     },
+        //     "application_context": {
+        //       "brand_name": "keycore",
+        //       "return_url": "https://example.com/returnUrl",
+        //       "cancel_url": "https://example.com/cancelUrl"
+        //     }
+        //   }
+
+        // ============ RESPONSE ============
+        // {
+        //     "status": "APPROVAL_PENDING",
+        //     "id": "I-37FWBT6U05LU",
+        //     "create_time": "2025-03-12T18:18:33Z",
+        //     "links": [
+        //       {
+        //         "href": "https://www.sandbox.paypal.com/webapps/billing/subscriptions?ba_token=BA-3JS71114TF809332K",
+        //         "rel": "approve",
+        //         "method": "GET"
+        //       },
+        //       {
+        //         "href": "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/I-37FWBT6U05LU",
+        //         "rel": "edit",
+        //         "method": "PATCH"
+        //       },
+        //       {
+        //         "href": "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/I-37FWBT6U05LU",
+        //         "rel": "self",
+        //         "method": "GET"
+        //       }
+        //     ]
+        //   }
+
+        // PAYMENT APPROVE
+        // returnUrl?subscription_id=I-37FWBT6U05LU&ba_token=BA-3JS71114TF809332K&token=2C126125X9437240T
+
         $subscription = $response->json();
 
         Log::info($subscription);
 
         $user->update([
-            'plan_id' => $plan->id,
+            // 'plan_id' => $plan->id,
             'paypal_subscription_id' => $subscription['id'],
-            'subscription_ends_at' => $this->getPeriod($plan->billing_interval, $plan->interval_count),
+            // 'subscription_ends_at' => $this->getPeriod($plan->billing_interval, $plan->interval_count),
         ]);
 
         $approvalUrl = $subscription['links'][0]['href'];
@@ -153,6 +200,9 @@ class PayPalController extends Controller
     public function handleWebhook(Request $request)
     {
         $event = $request->all();
+
+        Log::info('==== PAYPAL WEBHOOK =================================================================================================================================');
+        Log::info($event);
 
         /*
             If the event is a payment completed event, we extend the user's subscription end date

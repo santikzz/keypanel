@@ -57,18 +57,19 @@ export function PayPalPlanList({ plans }: { plans: object[] }) {
     return (
         <Card>
             <CardHeader>
-                <Label className='text-xl'>PayPal Products</Label>
+                <Label className='text-xl'>PayPal Plans</Label>
             </CardHeader>
             <CardContent>
 
-                <Deferred data="products" fallback={<div>Loading products...</div>}>
+                <Deferred data="plans" fallback={<div>Loading plans...</div>}>
                     <div className='flex flex-col gap-4'>
+                        {!plans?.plans && <Label className="text-red-500">No plans found.</Label>}
                         {plans?.plans?.map((plan, idx) => (
                             <Collapsible key={idx} className='p-2 border rounded-md bg-zinc-900'>
                                 <CollapsibleTrigger className='flex flex-row justify-between w-full items-center'>
-                                    <div className='flex flex-col gap-2'>
-                                        <Label>ID: {plan?.id}</Label>
-                                        <Label>NAME: {plan?.name}</Label>
+                                    <div className='flex flex-col gap-2 items-start'>
+                                        <Label>ID: <span className='text-indigo-300'>{plan?.id}</span></Label>
+                                        <Label>NAME: <span className='text-indigo-300'>{plan?.name}</span></Label>
                                     </div>
                                     <ChevronDown />
                                 </CollapsibleTrigger>

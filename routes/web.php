@@ -96,6 +96,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/paypal/products', [PayPalController::class, 'createProduct'])->name('paypal.createProduct');
     Route::post('/paypal/plans', [PayPalController::class, 'createPlan'])->name('paypal.createPlan');
 
+    Route::post('/plan', [SubscriptionPlanController::class, 'create'])->name('plans.store');
+    Route::put('/plan/{plan}', [SubscriptionPlanController::class, 'update'])->name('plans.update');
+    Route::delete('/plan/{plan}', [SubscriptionPlanController::class, 'delete'])->name('plans.delete');
+
 
 });
 

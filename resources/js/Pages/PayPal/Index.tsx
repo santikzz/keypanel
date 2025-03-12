@@ -12,8 +12,10 @@ import { useState } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { PayPalProductList } from './Fragments/PayPalProductList';
 import { PayPalPlanList } from './Fragments/PayPalPlanList';
+import { Tabs, TabsContent, TabsList, TabsTrigger, } from "@/Components/ui/tabs"
+import { TierPlans } from './Fragments/TierPlans';
 
-export default function Index({ products, plans }: { products: object[], plans: object[] }) {
+export default function Index({ pp_products, pp_plans, plans }: { pp_products: object[], pp_plans: object[], plans: object[] }) {
 
     const user = usePage().props.auth.user;
 
@@ -26,8 +28,28 @@ export default function Index({ products, plans }: { products: object[], plans: 
                 </div>
 
 
-                <PayPalProductList products={products} />
-                <PayPalPlanList plans={plans} />
+                <Tabs defaultValue="paypal" className="w-full">
+
+                    <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="paypal">PayPal Settings</TabsTrigger>
+                        <TabsTrigger value="tiers">Tier Plans</TabsTrigger>
+                        <TabsTrigger value="none">Empty</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="paypal">
+                        <div className='flex flex-col gap-4'>
+                            <PayPalProductList products={pp_products} />
+                            <PayPalPlanList plans={pp_plans} />
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value="tiers">
+                        <TierPlans plans={plans} />
+                    </TabsContent>
+
+                </Tabs>
+
+
 
 
             </div >

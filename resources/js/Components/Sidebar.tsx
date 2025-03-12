@@ -23,7 +23,7 @@ export const Sidebar = () => {
 
     const { url } = usePage();
     const user = usePage().props.auth.user;
-    console.log(user);
+    // console.log(user);
 
     const SidebarContent = (
         <ScrollArea className="h-full py-6">

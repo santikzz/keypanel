@@ -40,23 +40,19 @@ export function PayPalProductList({ products }: { products: object[] }) {
                 <Label className='text-xl'>PayPal Products</Label>
             </CardHeader>
             <CardContent>
-
                 <Deferred data="products" fallback={<div>Loading products...</div>}>
                     <div className='flex flex-col gap-4'>
+                        {!products?.products && <Label className="text-red-500">No products found.</Label>}
                         {products?.products?.map((product, idx) => (
                             <Collapsible key={idx} className='p-2 border rounded-md bg-zinc-900'>
                                 <CollapsibleTrigger className='flex flex-row justify-between w-full items-center'>
-                                    <div className='flex flex-col gap-2'>
-                                        <Label>ID: {product?.id}</Label>
-                                        <Label>NAME: {product?.name}</Label>
+                                    <div className='flex flex-col gap-2 items-start'>
+                                        <Label>ID: <span className='text-indigo-300'>{product?.id}</span></Label>
+                                        <Label>NAME: <span className='text-indigo-300'>{product?.name}</span></Label>
                                     </div>
                                     <ChevronDown />
                                 </CollapsibleTrigger>
                                 <CollapsibleContent className='bg-zinc-950 p-2 border rounded-md mt-2'>
-                                    {/* <div>
-                                                {JSON.stringify(product)}
-                                            </div> */}
-
                                     <CodeEditor
                                         data-color-mode="dark"
                                         value={JSON.stringify(product, null, 2)}
@@ -67,7 +63,6 @@ export function PayPalProductList({ products }: { products: object[] }) {
                                             fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
                                         }}
                                     />
-
                                 </CollapsibleContent>
                             </Collapsible>
                         ))}

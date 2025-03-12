@@ -20,13 +20,15 @@ class SubscriptionPlan extends Model
         'max_licenses',
         'max_resellers',
         'max_managers',
-        'features'
+        'features',
+        'is_visible'
     ];
 
     protected $casts = [
         'features' => 'array',
         'price' => 'decimal:2',
-        'is_free' => 'boolean'
+        'is_free' => 'boolean',
+        'is_visible' => 'boolean'
     ];
 
     public function subscriptors()
