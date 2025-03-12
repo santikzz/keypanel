@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PayPalController extends Controller
 {
@@ -101,7 +102,7 @@ class PayPalController extends Controller
         ])
             ->post($this->API_URL . '/v1/billing/subscriptions', [
                 'plan_id' => $plan->paypal_plan_id,
-                'start_time' => now()->addMinutes(5)->toIso8601String(),
+                'start_time' => now()->addMinutes(30)->toIso8601String(),
                 'subscriber' => [
                     'email_address' => $user->email,
                 ],
@@ -112,6 +113,8 @@ class PayPalController extends Controller
             ]);
 
         $subscription = $response->json();
+
+        Log::info($subscription);
 
         $user->update([
             'plan_id' => $plan->id,
