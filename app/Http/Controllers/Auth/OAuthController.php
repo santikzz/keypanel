@@ -41,10 +41,4 @@ class OAuthController extends Controller
     }
 
 
-    public function redirectToPatreon()
-    {
-        return Socialite::driver('patreon')
-            ->scopes(['identity', 'campaigns', 'pledges-to-me'])
-            ->redirect();
-    }
 }

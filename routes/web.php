@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ResellerAppController;
 use App\Http\Controllers\ResellerTimeTypeController;
 use App\Http\Controllers\SubscriptionPlanController;
@@ -90,6 +91,10 @@ Route::middleware('auth')->group(function () {
     */
     Route::get('/billing', [SubscriptionPlanController::class, 'index'])->name('billing.index');
     Route::post('/subscribe', [SubscriptionPlanController::class, 'subscribe'])->name('plans.subscribe');
+
+    Route::get('/paypal', [PayPalController::class, 'index'])->name('paypal.index');
+    Route::post('/paypal/products', [PayPalController::class, 'createProduct'])->name('paypal.createProduct');
+
 
 });
 
