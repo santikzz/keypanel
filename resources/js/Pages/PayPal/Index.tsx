@@ -38,8 +38,8 @@ export default function Index({ pp_products, pp_plans, plans }: { pp_products: o
 
                     <TabsContent value="paypal">
                         <div className='flex flex-col gap-4'>
-                            <PayPalProductList products={pp_products} />
-                            <PayPalPlanList plans={pp_plans} />
+                            <PayPalProductList pp_products={pp_products} />
+                            <PayPalPlanList pp_plans={pp_plans} />
                         </div>
                     </TabsContent>
 

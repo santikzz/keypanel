@@ -10,7 +10,7 @@ import { ChevronDown, Loader2, Plus } from 'lucide-react';
 import { useState } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 
-export function PayPalPlanList({ plans }: { plans: object[] }) {
+export function PayPalPlanList({ pp_plans }: { pp_plans: object[] }) {
 
     const user = usePage().props.auth.user;
 
@@ -61,10 +61,10 @@ export function PayPalPlanList({ plans }: { plans: object[] }) {
             </CardHeader>
             <CardContent>
 
-                <Deferred data="plans" fallback={<div>Loading plans...</div>}>
+                <Deferred data="pp_plans" fallback={<div>Loading plans...</div>}>
                     <div className='flex flex-col gap-4'>
-                        {!plans?.plans && <Label className="text-red-500">No plans found.</Label>}
-                        {plans?.plans?.map((plan, idx) => (
+                        {!pp_plans?.plans && <Label className="text-red-500">No plans found.</Label>}
+                        {pp_plans?.plans?.map((plan, idx) => (
                             <Collapsible key={idx} className='p-2 border rounded-md bg-zinc-900'>
                                 <CollapsibleTrigger className='flex flex-row justify-between w-full items-center'>
                                     <div className='flex flex-col gap-2 items-start'>
