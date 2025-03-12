@@ -15,6 +15,7 @@ class SubscriptionPlan extends Model
         'price',
         'billing_interval',
         'interval_count',
+        'paypal_plan_id',
         'max_applications',
         'max_licenses',
         'max_resellers',

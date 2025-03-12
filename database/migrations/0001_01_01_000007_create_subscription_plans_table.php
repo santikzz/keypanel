@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->string('billing_interval');
             $table->integer('interval_count')->default(1);
+            $table->string('paypal_plan_id')->nullable();
             $table->unsignedInteger('max_applications');
             $table->unsignedInteger('max_licenses');
             $table->unsignedInteger('max_resellers');

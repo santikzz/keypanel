@@ -94,6 +94,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/paypal', [PayPalController::class, 'index'])->name('paypal.index');
     Route::post('/paypal/products', [PayPalController::class, 'createProduct'])->name('paypal.createProduct');
+    Route::post('/paypal/plans', [PayPalController::class, 'createPlan'])->name('paypal.createPlan');
 
 
 });
