@@ -98,7 +98,7 @@ class PayPalController extends Controller
         return back()->withErrors(['error' => 'Failed to create plan.']);
     }
 
-    public function subscribe(Request $request): JsonResponse
+    public function subscribe(Request $request)
     {
         $user = Auth::user();
         $plan = SubscriptionPlan::findOrFail(request('plan_id'));
@@ -175,7 +175,7 @@ class PayPalController extends Controller
         ]);
 
         $approvalUrl = $subscription['links'][0]['href'];
-        return response()->json(['approval_url' => $approvalUrl]);
+        return redirect('billing.index')->with('approval_url', $approvalUrl);
     }
 
     public function getPeriod(string $billingInterval, int $intervalCount)

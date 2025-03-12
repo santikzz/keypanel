@@ -90,7 +90,7 @@ Route::middleware('auth')->group(function () {
         Subscriptions
     */
     Route::get('/billing', [SubscriptionPlanController::class, 'index'])->name('billing.index');
-    // Route::post('/subscribe', [PayPalController::class, 'subscribe'])->name('plans.subscribe');
+    Route::post('/subscribe', [PayPalController::class, 'subscribe'])->name('plans.subscribe');
 
     Route::get('/paypal', [PayPalController::class, 'index'])->name('paypal.index');
     Route::post('/paypal/products', [PayPalController::class, 'createProduct'])->name('paypal.createProduct');
@@ -99,8 +99,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/plan', [SubscriptionPlanController::class, 'create'])->name('plans.store');
     Route::put('/plan/{plan}', [SubscriptionPlanController::class, 'update'])->name('plans.update');
     Route::delete('/plan/{plan}', [SubscriptionPlanController::class, 'delete'])->name('plans.delete');
-
-
 });
 
 
