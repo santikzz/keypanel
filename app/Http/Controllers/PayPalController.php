@@ -106,6 +106,7 @@ class PayPalController extends Controller
 
         $user = Auth::user();
         $plan = SubscriptionPlan::findOrFail(request('plan_id'));
+        $paypalCustomId = Uuid::uuid4();
 
         Log::info($request);
         Log::info('plan id: ' . request('plan_id'));
@@ -121,7 +122,7 @@ class PayPalController extends Controller
                 'subscriber' => [
                     'email_address' => $user->email,
                 ],
-                'custom_id' => Uuid::uuid4(),
+                'custom_id' => $paypalCustomId,
                 'application_context' => [
                     'return_url' => route('billing.index'),
                     'cancel_url' => route('billing.index'),
@@ -176,6 +177,7 @@ class PayPalController extends Controller
         $user->update([
             'pending_plan_id' => $plan->id,
             'paypal_subscription_id' => $subscription['id'],
+            'paypal_custom_id' => $paypalCustomId,
             // 'subscription_ends_at' => $this->getPeriod($plan->billing_interval, $plan->interval_count),
         ]);
 
