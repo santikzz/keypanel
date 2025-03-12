@@ -45,6 +45,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'plan_id',
+        'pending_plan_id',
+        'paypal_subscription_id',
+        'subscription_ends_at',
+        'disabled',
     ];
 
     protected $with = ['roles', 'permissions'];
