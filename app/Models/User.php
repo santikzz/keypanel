@@ -35,6 +35,7 @@ class User extends Authenticatable
         'pending_plan_id',
         'paypal_subscription_id',
         'subscription_ends_at',
+        'paypal_custom_id',
     ];
 
     /**
@@ -50,6 +51,7 @@ class User extends Authenticatable
         'paypal_subscription_id',
         'subscription_ends_at',
         'disabled',
+        'paypal_custom_id',
     ];
 
     protected $with = ['roles', 'permissions'];

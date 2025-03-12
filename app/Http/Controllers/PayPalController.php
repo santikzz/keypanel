@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Ramsey\Uuid\Uuid;
 
 class PayPalController extends Controller
 {
@@ -120,7 +121,7 @@ class PayPalController extends Controller
                 'subscriber' => [
                     'email_address' => $user->email,
                 ],
-                'custom_id' => $plan->paypal_plan_id,
+                'custom_id' => Uuid::uuid4(),
                 'application_context' => [
                     'return_url' => route('billing.index'),
                     'cancel_url' => route('billing.index'),
@@ -213,7 +214,7 @@ class PayPalController extends Controller
             If the event is a payment completed event, we extend the user's subscription end date
         */
         if ($event['event_type'] === 'PAYMENT.SALE.COMPLETED') {
-            $user = User::where('paypal_subscription_id', $event['resource']['custom_id'])->first();
+            $user = User::where('paypal_custom_id', $event['resource']['custom_id'])->first();
             if ($user) {
                 $user->update([
                     'plan_id' => $user->pending_plan_id,

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('plan_id')->nullable()->nullOnDelete();
             $table->foreignId('pending_plan_id')->nullable()->nullOnDelete();
             $table->string('paypal_subscription_id')->nullable();
+            $table->string('paypal_custom_id')->nullable();
             $table->timestamp('subscription_ends_at')->nullable();
 
             $table->rememberToken();
