@@ -175,7 +175,7 @@ class PayPalController extends Controller
         ]);
 
         $approvalUrl = $subscription['links'][0]['href'];
-        return redirect('billing.index')->with('approval_url', $approvalUrl);
+        return back()->with('approval_url', $approvalUrl);
     }
 
     public function getPeriod(string $billingInterval, int $intervalCount)
