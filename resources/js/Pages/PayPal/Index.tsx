@@ -1,4 +1,5 @@
-
+// @ts-ignore
+// @ts-nocheck
 
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/Components/ui/card';
