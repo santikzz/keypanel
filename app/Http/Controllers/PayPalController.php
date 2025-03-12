@@ -216,12 +216,18 @@ class PayPalController extends Controller
             If the event is a payment completed event, we extend the user's subscription end date
         */
         if ($event['event_type'] === 'PAYMENT.SALE.COMPLETED') {
+            
             $user = User::where('paypal_custom_id', $event['resource']['custom'])->first();
-            if ($user) {
+            $plan = SubscriptionPlan::findOrFail($user->pending_plan_id);
+
+            Log::info($user);
+            Log::info($plan);
+            
+            if ($user && $plan) {
                 $user->update([
                     'plan_id' => $user->pending_plan_id,
                     'pending_plan_id' => null,
-                    'subscription_ends_at' => $this->getPeriod($user->plan->billing_interval, $user->plan->interval_count),
+                    'subscription_ends_at' => $this->getPeriod($plan->billing_interval, $plan->interval_count),
                 ]);
             }
         }
