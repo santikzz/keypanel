@@ -214,7 +214,7 @@ class PayPalController extends Controller
             If the event is a payment completed event, we extend the user's subscription end date
         */
         if ($event['event_type'] === 'PAYMENT.SALE.COMPLETED') {
-            $user = User::where('paypal_custom_id', $event['resource']['custom_id'])->first();
+            $user = User::where('paypal_custom_id', $event['resource']['custom'])->first();
             if ($user) {
                 $user->update([
                     'plan_id' => $user->pending_plan_id,
