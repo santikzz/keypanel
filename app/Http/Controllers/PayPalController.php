@@ -27,10 +27,10 @@ class PayPalController extends Controller
 
     public function index()
     {
-        // $products = $this->getProducts();
-        // $plans = $this->getPlans();
-        $pp_products = [];
-        $pp_plans = [];
+        $pp_products = $this->getProducts();
+        $pp_plans = $this->getPlans();
+        // $pp_products = [];
+        // $pp_plans = [];
         $plans = SubscriptionPlan::where('is_free', false)->get();
 
         return Inertia::render('PayPal/Index', [
