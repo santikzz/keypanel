@@ -94,7 +94,7 @@ class PayPalController extends Controller
     public function subscribe(Request $request)
     {
         $user = Auth::user();
-        $plan = SubscriptionPlan::findOrFail(request('plan_id'))->first();
+        $plan = SubscriptionPlan::findOrFail(request('plan_id'));
 
         Log::info($request);
         Log::info('plan id: ' . request('plan_id'));
