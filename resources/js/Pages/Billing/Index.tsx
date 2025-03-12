@@ -6,11 +6,12 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/Components/ui/card'
 import { Label } from '@/Components/ui/label';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Deferred, Head, router, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 export default function Index({ plans }: { plans: object[] }) {
 
     const user = usePage().props.auth.user;
-    const props = usePage().props;
+    const { flash } = usePage().props;
 
     const handleSubscribe = (planId: number) => {
         router.post(route('plans.subscribe'), {
@@ -19,8 +20,11 @@ export default function Index({ plans }: { plans: object[] }) {
         );
     }
 
-    console.log(user);
-    console.log(props);
+    useEffect(() => {
+        if (flash?.result) {
+            window.location.href = flash?.result;
+        }
+    }, [flash?.result])
 
     return (
         <AuthenticatedLayout>
