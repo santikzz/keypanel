@@ -44,6 +44,7 @@ class SubscriptionPlanController extends Controller
     {
         $user = Auth::user();
         $plan->delete();
+        
         return redirect()->route('paypal.index');
     }
 }
