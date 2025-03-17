@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\PaddleController;
 use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\UserSubscriptionController;
@@ -16,5 +17,4 @@ Route::get('health', function () {
 });
 
 Route::post('/v1/verify', [LicenseController::class, 'verify'])->name('api.verify');
-// Route::post('/webhook/paypal', [PayPalController::class, 'handleWebhook'])->name('webhook.paypal');
-
+Route::post('/webhook/paddle', [PaddleController::class, 'webhook'])->name('webhook.paddle');

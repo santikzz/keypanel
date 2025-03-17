@@ -47,11 +47,5 @@ class SubscriptionPlanController extends Controller
     //     return redirect()->route('paypal.index');
     // }
 
-    public function paddleCheckout(Request $request)
-    {
-        $checkout = $request->user()->checkout('pri_01jphtdhjw2tj408kzvgn5yybp')
-            ->returnTo(route('dashboard'));
 
-        return view('subscribe', ['checkout' => $checkout]);
-    }
 }

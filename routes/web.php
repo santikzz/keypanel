@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\PaddleController;
 use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ResellerAppController;
 use App\Http\Controllers\ResellerTimeTypeController;
@@ -101,7 +102,7 @@ Route::middleware('auth')->group(function () {
     // Route::put('/plan/{plan}', [SubscriptionPlanController::class, 'update'])->name('plans.update');
     // Route::delete('/plan/{plan}', [SubscriptionPlanController::class, 'delete'])->name('plans.delete');
 
-    Route::get('/subscribe', [SubscriptionPlanController::class, 'paddleCheckout'])->name('subscribe');
+    Route::get('/subscribe', [PaddleController::class, 'subscribe'])->name('subscribe');
 
 });
 
