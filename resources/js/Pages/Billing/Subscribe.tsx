@@ -22,9 +22,9 @@ export default function Subscribe({ checkout }: { checkout: object[] }) {
                 </div>
 
                 <Deferred data="checkout" fallback={<div>Loading...</div>}>
-                    <x-paddle-button checkout={checkout} class="px-8 py-4">
+                    {/* <x-paddle-button checkout={checkout} class="px-8 py-4">
                         Subscribe
-                    </x-paddle-button>
+                    </x-paddle-button> */}
                 </Deferred>
 
             </div>

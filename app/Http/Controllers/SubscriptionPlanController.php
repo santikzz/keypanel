@@ -49,14 +49,9 @@ class SubscriptionPlanController extends Controller
 
     public function paddleCheckout(Request $request)
     {
-        $checkout = $request->user()->checkout('pri_01jpht08sw0scgzmk5k0j054ey')->returnTo(route('dashboard'));
+        $checkout = $request->user()->checkout('pri_01jphtdhjw2tj408kzvgn5yybp')
+            ->returnTo(route('dashboard'));
 
-        return Inertia::render('Billing/Subscribe', [
-            'checkout' => Inertia::defer(
-                fn() => $checkout
-            ),
-        ]);
-
-        // return view('subscribe', ['checkout' => $checkout]);
+        return view('subscribe', ['checkout' => $checkout]);
     }
 }
