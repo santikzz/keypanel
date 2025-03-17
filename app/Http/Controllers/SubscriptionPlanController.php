@@ -26,25 +26,37 @@ class SubscriptionPlanController extends Controller
         ]);
     }
 
-    public function create(Request $request): RedirectResponse
-    {
-        $user = Auth::user();
-        SubscriptionPlan::create($request->all());
-        return redirect()->route('paypal.index');
-    }
+    // public function create(Request $request): RedirectResponse
+    // {
+    //     $user = Auth::user();
+    //     SubscriptionPlan::create($request->all());
+    //     return redirect()->route('paypal.index');
+    // }
 
-    public function update(Request $request, SubscriptionPlan $plan): RedirectResponse
-    {
-        $user = Auth::user();
-        $plan->update($request->all());
-        return redirect()->route('paypal.index');
-    }
+    // public function update(Request $request, SubscriptionPlan $plan): RedirectResponse
+    // {
+    //     $user = Auth::user();
+    //     $plan->update($request->all());
+    //     return redirect()->route('paypal.index');
+    // }
 
-    public function delete(SubscriptionPlan $plan): RedirectResponse
+    // public function delete(SubscriptionPlan $plan): RedirectResponse
+    // {
+    //     $user = Auth::user();
+    //     $plan->delete();
+    //     return redirect()->route('paypal.index');
+    // }
+
+    public function paddleCheckout(Request $request)
     {
-        $user = Auth::user();
-        $plan->delete();
-        
-        return redirect()->route('paypal.index');
+        $checkout = $request->user()->checkout('price_basic_monthly')->returnTo(route('dashboard'));
+
+        return Inertia::render('Billing/Subscribe', [
+            'checkout' => Inertia::defer(
+                fn() => $checkout
+            ),
+        ]);
+
+        // return view('subscribe', ['checkout' => $checkout]);
     }
 }

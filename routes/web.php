@@ -31,6 +31,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -92,13 +93,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/billing', [SubscriptionPlanController::class, 'index'])->name('billing.index');
     Route::post('/subscribe', [PayPalController::class, 'subscribe'])->name('plans.subscribe');
 
-    Route::get('/paypal', [PayPalController::class, 'index'])->name('paypal.index');
-    Route::post('/paypal/products', [PayPalController::class, 'createProduct'])->name('paypal.createProduct');
-    Route::post('/paypal/plans', [PayPalController::class, 'createPlan'])->name('paypal.createPlan');
+    // Route::get('/paypal', [PayPalController::class, 'index'])->name('paypal.index');
+    // Route::post('/paypal/products', [PayPalController::class, 'createProduct'])->name('paypal.createProduct');
+    // Route::post('/paypal/plans', [PayPalController::class, 'createPlan'])->name('paypal.createPlan');
 
-    Route::post('/plan', [SubscriptionPlanController::class, 'create'])->name('plans.store');
-    Route::put('/plan/{plan}', [SubscriptionPlanController::class, 'update'])->name('plans.update');
-    Route::delete('/plan/{plan}', [SubscriptionPlanController::class, 'delete'])->name('plans.delete');
+    // Route::post('/plan', [SubscriptionPlanController::class, 'create'])->name('plans.store');
+    // Route::put('/plan/{plan}', [SubscriptionPlanController::class, 'update'])->name('plans.update');
+    // Route::delete('/plan/{plan}', [SubscriptionPlanController::class, 'delete'])->name('plans.delete');
+
+    Route::get('/subscribe', [SubscriptionPlanController::class, 'paddleCheckout'])->name('subscribe');
+
 });
 
 
