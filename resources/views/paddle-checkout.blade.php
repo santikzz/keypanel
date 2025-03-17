@@ -13,9 +13,6 @@
 
     <!-- Scripts -->
     @routes
-    <!-- @viteReactRefresh
-        @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
-        @inertiaHead -->
     @paddleJS
 </head>
 
