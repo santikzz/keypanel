@@ -150,6 +150,9 @@
   "resources/js/Pages/Billing/Index.tsx": [
     "/build/assets/Index-BwVbCPbx.js"
   ],
+  "resources/js/Pages/Billing/Subscribe.tsx": [
+    "/build/assets/Subscribe-Dz30-T3y.js"
+  ],
   "resources/js/Pages/Dashboard.tsx": [
     "/build/assets/Dashboard-CCCVM0u6.js"
   ],
