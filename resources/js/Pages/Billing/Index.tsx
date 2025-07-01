@@ -13,35 +13,35 @@ export default function Index({ plans }: { plans: object[] }) {
     const user = usePage().props.auth.user;
     const { flash } = usePage().props;
 
-    const handleSubscribe = (planId: number) => {
-        router.post(route('plans.subscribe'), {
-            plan_id: planId,
-        }
-        );
+    const handleSubscribe = (paddlePriceId: number) => {
+        router.get(route('paddle.checkout'), { paddlePriceId: paddlePriceId }, { replace: true });
     }
 
-    useEffect(() => {
-        if (flash?.result) {
-            window.location.href = flash?.result;
-        }
-    }, [flash?.result])
+    // useEffect(() => {
+    //     if (flash?.result) {
+    //         window.location.href = flash?.result;
+    //     }
+    // }, [flash?.result])
+
+    console.log(user);
 
     return (
         <AuthenticatedLayout>
             <div className="space-y-6">
                 <Head title="Subscriptions" />
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Plans</h2>
+                    <h2 className="text-3xl font-bold tracking-tight">Billing</h2>
                 </div>
 
                 <Card>
                     <CardHeader>
-                        <Label className='text-2xl'>Billing</Label>
+                        <Label className='text-2xl'>Current Plan</Label>
                     </CardHeader>
                     <CardContent>
                         <div className='flex flex-col'>
-                            <h2>Current Plan: {user?.subscription.name}</h2>
-                            <h2>{user?.subscription.price} - {user?.subscription.interval_count} {user?.subscription.billing_interval}</h2>
+                            <h2 className='font-bold text-xl'>{user?.subscription.name}</h2>
+                            <h2>{user?.subscription.interval_count} {user?.subscription.billing_interval}</h2>
+                            {/* <h2>${user?.subscription.price} / month</h2> */}
                         </div>
                     </CardContent>
                 </Card>
@@ -60,7 +60,7 @@ export default function Index({ plans }: { plans: object[] }) {
                                     </div>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button onClick={() => handleSubscribe(plan?.id)} className='btn-primary'>
+                                    <Button onClick={() => handleSubscribe(plan?.paddle_price_id)} className='btn-primary'>
                                         Subscribe
                                     </Button>
                                 </CardFooter>

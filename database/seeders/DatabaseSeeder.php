@@ -43,7 +43,8 @@ class DatabaseSeeder extends Seeder
             'max_licenses' => 100,
             'max_resellers' => 10,
             'max_managers' => 10,
-            'features' => []
+            'features' => [],
+            'paddle_price_id' => 'pri_01jphtdhjw2tj408kzvgn5yybp'
         ]);
 
         SubscriptionPlan::create([
@@ -75,7 +76,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => 'adminadmin',
             'plan_id' => SubscriptionPlan::getFreePlan()->id,
+            'is_super' => true
         ]);
         $user->assignRole('owner');
+        
     }
 }

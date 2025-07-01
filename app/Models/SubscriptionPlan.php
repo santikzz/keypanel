@@ -15,13 +15,13 @@ class SubscriptionPlan extends Model
         'price',
         'billing_interval',
         'interval_count',
-        'paypal_plan_id',
         'max_applications',
         'max_licenses',
         'max_resellers',
         'max_managers',
         'features',
-        'is_visible'
+        'is_visible',
+        'paddle_price_id',
     ];
 
     protected $casts = [
@@ -45,4 +45,5 @@ class SubscriptionPlan extends Model
     {
         return $this->is_free === true;
     }
+    
 }

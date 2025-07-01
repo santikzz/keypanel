@@ -22,11 +22,9 @@ return new class extends Migration
             $table->decimal('balance', 10, 2)->default(0.00);
             $table->boolean('disabled')->default(false);
             $table->foreignId('plan_id')->nullable()->nullOnDelete();
-            $table->foreignId('pending_plan_id')->nullable()->nullOnDelete();
-            $table->string('paypal_subscription_id')->nullable();
-            $table->string('paypal_custom_id')->nullable();
-            $table->timestamp('subscription_ends_at')->nullable();
-
+            $table->timestamp('plan_ends_at')->nullable();
+            $table->boolean('is_super')->default(false);
+            $table->json('paddle_json')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

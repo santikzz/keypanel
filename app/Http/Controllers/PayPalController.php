@@ -27,26 +27,26 @@ class PayPalController extends Controller
     //     $this->CLIENT_SECRET = config('paypal.' . config('paypal.mode') . '.client_secret');
     // }
 
-    // public function index()
-    // {
-    //     $pp_products = $this->getProducts();
-    //     $pp_plans = $this->getPlans();
-    //     // $pp_products = [];
-    //     // $pp_plans = [];
-    //     $plans = SubscriptionPlan::where('is_free', false)->get();
+    public function index()
+    {
+        $pp_products = [];
+        $pp_plans = [];
+        // $pp_products = [];
+        // $pp_plans = [];
+        $plans = SubscriptionPlan::where('is_free', false)->get();
 
-    //     return Inertia::render('PayPal/Index', [
-    //         'pp_products' => Inertia::defer(
-    //             fn() => $pp_products
-    //         ),
-    //         'pp_plans' => Inertia::defer(
-    //             fn() => $pp_plans
-    //         ),
-    //         'plans' => Inertia::defer(
-    //             fn() => $plans
-    //         ),
-    //     ]);
-    // }
+        return Inertia::render('PayPal/Index', [
+            'pp_products' => Inertia::defer(
+                fn() => $pp_products
+            ),
+            'pp_plans' => Inertia::defer(
+                fn() => $pp_plans
+            ),
+            'plans' => Inertia::defer(
+                fn() => $plans
+            ),
+        ]);
+    }
 
     // public function getProducts()
     // {

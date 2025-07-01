@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\CheckSuperUser;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,6 +16,18 @@ use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSubscriptionController;
 
+
+/*
+    (redirect) dependiendo si hago /auth/google o /auth/discord,
+    me redirige a la pagina de login de google o discord.
+
+    (callback) dependiendo donde me haya logeado (google o discord),
+    en la configuracion de cada proveedor tengo que poner la el url callback especifico.
+    
+    por ejemplo, en la configuracion de 
+    google tengo que poner: http://tu-dominio.com/auth/google/callback
+    y en la de discord: http://tu-dominio.com/auth/discord/callback
+*/
 Route::get('/auth/{provider}', [OAuthController::class, 'redirect'])->where('provider', 'google|discord');
 Route::get('/auth/{provider}/callback', [OAuthController::class, 'callback'])->where('provider', 'google|discord');
 
@@ -92,18 +105,29 @@ Route::middleware('auth')->group(function () {
         Subscriptions
     */
     Route::get('/billing', [SubscriptionPlanController::class, 'index'])->name('billing.index');
-    Route::post('/subscribe', [PayPalController::class, 'subscribe'])->name('plans.subscribe');
+    // Route::post('/subscribe', [PayPalController::class, 'subscribe'])->name('plans.subscribe');
 
     // Route::get('/paypal', [PayPalController::class, 'index'])->name('paypal.index');
     // Route::post('/paypal/products', [PayPalController::class, 'createProduct'])->name('paypal.createProduct');
     // Route::post('/paypal/plans', [PayPalController::class, 'createPlan'])->name('paypal.createPlan');
 
-    // Route::post('/plan', [SubscriptionPlanController::class, 'create'])->name('plans.store');
-    // Route::put('/plan/{plan}', [SubscriptionPlanController::class, 'update'])->name('plans.update');
+
     // Route::delete('/plan/{plan}', [SubscriptionPlanController::class, 'delete'])->name('plans.delete');
 
-    Route::get('/subscribe', [PaddleController::class, 'subscribe'])->name('subscribe');
+    Route::get('/paddle/checkout', [PaddleController::class, 'subscribe'])->name('paddle.checkout');
 
+    /*
+        Super user routes (settings)
+    */
+    Route::middleware(CheckSuperUser::class)->group(function () {
+
+        // Route::get('/settings/plans', [SubscriptionPlanController::class, 'index'])->name('plans.index');
+        Route::get('/settings/plans', [PayPalController::class, 'index'])->name('paypal.index');
+        Route::post('/plan', [SubscriptionPlanController::class, 'create'])->name('plans.store');
+        Route::put('/plan/{plan}', [SubscriptionPlanController::class, 'update'])->name('plans.update');
+
+
+    });
 });
 
 

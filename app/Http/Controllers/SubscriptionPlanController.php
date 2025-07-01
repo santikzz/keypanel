@@ -14,9 +14,13 @@ use Illuminate\Support\Facades\Http;
 class SubscriptionPlanController extends Controller
 {
 
-    public function index(): Response
+    public function index(): Response|RedirectResponse
     {
         $user = Auth::user();
+        if (!$user->is_super) {
+            return redirect()->route('dashboard');
+        }
+
         $plans = SubscriptionPlan::all();
 
         return Inertia::render('Billing/Index', [
@@ -26,26 +30,24 @@ class SubscriptionPlanController extends Controller
         ]);
     }
 
-    // public function create(Request $request): RedirectResponse
-    // {
-    //     $user = Auth::user();
-    //     SubscriptionPlan::create($request->all());
-    //     return redirect()->route('paypal.index');
-    // }
+    public function create(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+        SubscriptionPlan::create($request->all());
+        return redirect()->route('paypal.index');
+    }
 
-    // public function update(Request $request, SubscriptionPlan $plan): RedirectResponse
-    // {
-    //     $user = Auth::user();
-    //     $plan->update($request->all());
-    //     return redirect()->route('paypal.index');
-    // }
+    public function update(Request $request, SubscriptionPlan $plan): RedirectResponse
+    {
+        $user = Auth::user();
+        $plan->update($request->all());
+        return redirect()->route('paypal.index');
+    }
 
-    // public function delete(SubscriptionPlan $plan): RedirectResponse
-    // {
-    //     $user = Auth::user();
-    //     $plan->delete();
-    //     return redirect()->route('paypal.index');
-    // }
-
-
+    public function delete(SubscriptionPlan $plan): RedirectResponse
+    {
+        $user = Auth::user();
+        $plan->delete();
+        return redirect()->route('paypal.index');
+    }
 }

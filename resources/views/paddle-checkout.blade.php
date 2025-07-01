@@ -12,15 +12,16 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @routes
     @paddleJS
 </head>
 
 <body class="font-sans antialiased">
 
+
     <x-paddle-button :checkout="$checkout" class="px-8 py-4">
         Subscribe
     </x-paddle-button>
+
 
 </body>
 

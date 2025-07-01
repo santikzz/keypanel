@@ -15,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    
+
     use HasFactory;
     use Notifiable;
     use HasRoles;
@@ -37,10 +37,9 @@ class User extends Authenticatable
         'balance',
         'disabled',
         'plan_id',
-        'pending_plan_id',
-        'paypal_subscription_id',
-        'subscription_ends_at',
-        'paypal_custom_id',
+        'plan_ends_at',
+        'is_super',
+        'paddle_json',
     ];
 
     /**
@@ -52,11 +51,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'plan_id',
-        'pending_plan_id',
-        'paypal_subscription_id',
-        'subscription_ends_at',
         'disabled',
-        'paypal_custom_id',
+        'is_super',
+        'paddle_json'
     ];
 
     protected $with = ['roles', 'permissions'];
@@ -74,6 +71,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'disabled' => 'boolean',
+            'paddle_json' => 'array',
         ];
     }
 
@@ -228,7 +226,7 @@ class User extends Authenticatable
         return $this->managers()->count() < $plan->max_managers;
     }
 
-    public function subscribeToPlan(SubscriptionPlan $plan)
+    public function subscribeToPlan(SubscriptionPlan $plan, $endsAt = null)
     {
         // Find or create a subscription
         // $subscription = UserSubscription::firstOrNew(['user_id' => $this->id]);
@@ -268,8 +266,13 @@ class User extends Authenticatable
         // $subscription->save();
         // return $subscription;
 
-        $this->update(['plan_id' => $plan->id]);
+        $this->update(['plan_id' => $plan->id, 'plan_ends_at' => $endsAt]);
         return $this;
+    }
+
+    public function plantExtendPeriod($date)
+    {
+        $this->update(['plan_ends_at' => $date]);
     }
 
     public function assignFreePlan()

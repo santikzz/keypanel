@@ -16,7 +16,7 @@ const menuItems = [
     { icon: CreditCard, label: "Billing", href: "/billing", role: ["owner"] },
     { icon: HardDrive, label: "HWID Blacklist", href: "/blacklist", role: ["owner", "manager", "reseller"] },
     { icon: UserCog, label: "Profile", href: "/profile", role: ["owner", "manager", "reseller"] },
-    { icon: UserCog, label: "PayPal", href: "/paypal", role: ["owner"] },
+    { icon: UserCog, label: "Settings", href: "/settings/plans", role: ["owner"] },
 ]
 
 export const Sidebar = () => {
